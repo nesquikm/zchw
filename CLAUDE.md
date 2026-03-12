@@ -54,7 +54,9 @@ packages/
 
 ```bash
 npm run dev:web       # Start web dashboard (localhost:5173)
+npm run stop:web      # Stop web dashboard
 npm run dev:mcp       # Start MCP server (HTTP dev mode with watch)
+npm run stop:mcp      # Stop MCP server
 npm run build         # Build all packages
 npm run test          # Run all tests
 npm run typecheck     # TypeScript type checking

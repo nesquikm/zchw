@@ -10,6 +10,8 @@
   "scripts": {
     "dev:web": "npm run dev -w packages/web",
     "dev:mcp": "npm run dev -w packages/mcp-server",
+    "stop:web": "lsof -ti:5173 | xargs kill 2>/dev/null || true",
+    "stop:mcp": "lsof -ti:3001 | xargs kill 2>/dev/null || true",
     "build": "npm run build -w packages/shared && npm run build -w packages/web && npm run build -w packages/mcp-server",
     "test": "vitest run",
     "test:watch": "vitest",
