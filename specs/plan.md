@@ -325,32 +325,112 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 
 ---
 
+## M13: Web + MCP App — Adoption & Enablement (FR-3)
+
+**Objective:** Adoption page with onboarding funnel, usage trends, capability heatmap, and team health. Plus MCP App UI.
+
+**Tasks:**
+
+1. Create `packages/web/src/components/charts/adoption-funnel.tsx` — funnel visualization showing invited → activated → first outcome → regular (monotonically decreasing)
+2. Create `packages/web/src/components/charts/active-users-over-time.tsx` — DAU/WAU line chart over time
+3. Create `packages/web/src/components/charts/capability-adoption.tsx` — bar chart showing task type distribution (code generation, review, test writing, debugging, documentation, refactoring)
+4. Create `packages/web/src/components/charts/team-usage-table.tsx` — team table with sessions/user/week, success rate, and "where AI is failing" highlight for below-average teams
+5. Create `packages/web/src/routes/dashboard/adoption.tsx` — Adoption page composing all charts + metric cards (time-to-value median)
+6. Create `packages/mcp-server/apps/adoption/src/adoption-app.tsx` — MCP App UI:
+   - Receives structuredContent via `app.ontoolresult`
+   - Renders funnel, DAU/WAU chart, capability bars, team usage
+   - Filter controls for date range, team, model
+   - Calls `poll_adoption_data` on filter change
+7. Register Adoption App resource in server.ts
+
+**Tests (write first):**
+
+- `tests/unit/web/components/adoption-funnel.test.tsx` — renders 4 stages, counts are monotonically decreasing
+- `tests/unit/web/components/active-users-over-time.test.tsx` — DAU ≤ WAU for each date
+- `tests/unit/web/components/capability-adoption.test.tsx` — renders bars, at least 4 of 6 task types, percentages sum to 100%
+- `tests/unit/web/components/team-usage-table.test.tsx` — highlights below-average teams
+- `tests/unit/web/pages/adoption-page.test.tsx` — page renders all components with real service data (seed 42)
+- AC-3.1: funnel stages monotonically decrease
+- AC-3.2: time-to-value median > 0, human-readable
+- AC-3.3: below-average teams visually highlighted
+- AC-3.4: at least 4 of 6 task types in capability adoption
+
+**Definition of done:** Adoption page renders all FR-3 metrics. MCP App builds as single-file HTML. All AC-3.x pass. Tests pass.
+
+---
+
+## M14: Web + MCP App — Quality & Autonomy (FR-4)
+
+**Objective:** Quality page with success rates, autonomy distribution, failure analysis, and latency metrics. Plus MCP App UI.
+
+**Tasks:**
+
+1. Create `packages/web/src/components/charts/autonomy-distribution.tsx` — pie or stacked bar showing guided/supervised/autonomous percentages (sum to 100%)
+2. Create `packages/web/src/components/charts/failure-modes.tsx` — horizontal bar chart showing failure mode breakdown (agent error, infra issue, policy block, test failure, human abandoned)
+3. Create `packages/web/src/components/charts/completion-time.tsx` — p50/p95 latency display
+4. Create `packages/web/src/routes/dashboard/quality.tsx` — Quality page composing all charts + metric cards (verified success rate, intervention rate, revert rate — all with trends)
+5. Create `packages/mcp-server/apps/quality/src/quality-app.tsx` — MCP App UI:
+   - Receives structuredContent via `app.ontoolresult`
+   - Renders autonomy distribution, failure modes, metric cards
+   - Filter controls for date range, team, model
+   - Calls `poll_quality_data` on filter change
+6. Register Quality App resource in server.ts
+
+**Tests (write first):**
+
+- `tests/unit/web/components/autonomy-distribution.test.tsx` — renders 3 levels, percentages sum to 100%
+- `tests/unit/web/components/failure-modes.test.tsx` — renders bars, percentages sum to 100%, at least 3 modes
+- `tests/unit/web/components/completion-time.test.tsx` — renders p50/p95, p95 ≥ p50
+- `tests/unit/web/pages/quality-page.test.tsx` — page renders all components with real service data (seed 42)
+- AC-4.1: all 6 metrics visible (success rate, autonomy, intervention, revert, failure modes, p50/p95)
+- AC-4.2: autonomy levels sum to 100%
+- AC-4.3: failure modes sum to 100% of failed sessions, ≥3 modes
+- AC-4.4: p95 ≥ p50
+- AC-4.5: L3 autonomous % higher in later period vs. first period (multi-seed)
+
+**Definition of done:** Quality page renders all FR-4 metrics. MCP App builds as single-file HTML. All AC-4.x pass. Tests pass.
+
+---
+
+## M15: Web + MCP App — Governance & Compliance (FR-5)
+
+**Objective:** Governance page with policy effectiveness, sensitive data tracking, access audit, event log, and severity trends. Plus MCP App UI.
+
+**Tasks:**
+
+1. Create `packages/web/src/components/charts/severity-over-time.tsx` — stacked bar chart showing low/medium/high/critical severity over time
+2. Create `packages/web/src/components/charts/event-log-table.tsx` — scrollable/paginable table sorted by timestamp descending (id, timestamp, user, event type, severity, description, repository)
+3. Create `packages/web/src/components/charts/access-scope-table.tsx` — table showing repository, session count, event count
+4. Create `packages/web/src/routes/dashboard/governance.tsx` — Governance page composing charts + metric cards (policy block rate, override rate, sensitive data blocked/allowed/total, top violated policies)
+5. Create `packages/mcp-server/apps/governance/src/governance-app.tsx` — MCP App UI:
+   - Receives structuredContent via `app.ontoolresult`
+   - Renders severity chart, event log, policy stats
+   - Filter controls for date range, team
+   - Calls `poll_governance_data` on filter change
+6. Register Governance App resource in server.ts
+
+**Tests (write first):**
+
+- `tests/unit/web/components/severity-over-time.test.tsx` — renders all 4 severity levels
+- `tests/unit/web/components/event-log-table.test.tsx` — sorted descending by timestamp
+- `tests/unit/web/components/access-scope-table.test.tsx` — renders repository, session count, event count
+- `tests/unit/web/pages/governance-page.test.tsx` — page renders all components with real service data (seed 42)
+- AC-5.1: policy block rate, override rate, sensitive data stats, and event log all visible
+- AC-5.2: event log sorted by timestamp descending
+- AC-5.3: blocked + allowed = total sensitive data events
+
+**Definition of done:** Governance page renders all FR-5 metrics. MCP App builds as single-file HTML. All AC-5.x pass. Tests pass.
+
+---
+
 ## Stretch Milestones
 
-### S1: Adoption & Enablement Page (FR-3)
-
-- Create web page + charts (funnel, DAU/WAU, capability heatmap, "where AI is failing")
-- Create MCP App UI
-- Tests for page + app
-
-### S2: Quality & Autonomy Page (FR-4)
-
-- Create web page + charts (autonomy distribution, failure modes, p50/p95, revert rate)
-- Create MCP App UI
-- Tests for page + app
-
-### S3: Governance & Compliance Page (FR-5)
-
-- Simplified: event log table + policy block counts + severity distribution
-- Create MCP App UI
-- Tests for page + app
-
-### S4: E2E Tests (Playwright)
+### S1: E2E Tests (Playwright)
 
 - Dashboard navigation, filter persistence, data verification
 - Tests from testing-spec.md Section 7
 
-### S5: Dark Mode
+### S2: Dark Mode
 
 - Tailwind dark mode toggle
 - Chart palette adaptation
