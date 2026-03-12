@@ -74,7 +74,9 @@ export function getSpendBreakdown(
     }
   }
   const dailySpendArray = monthDates.map((d) => dailySpendMap.get(d) ?? 0);
-  const projectedMonthEnd = projectMonthEnd(dailySpendArray, filterEndDate);
+  // AC-2.3: projection must be ≥ total spent so far (even when filter range spans months)
+  const rawProjection = projectMonthEnd(dailySpendArray, filterEndDate);
+  const projectedMonthEnd = Math.max(rawProjection, totalSpend);
 
   // Spend by day
   const rangeDates = getDateRange(filters.dateRange.from, filters.dateRange.to);
