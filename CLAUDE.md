@@ -5,9 +5,10 @@
 AgentView is an organizational analytics dashboard for engineering teams using cloud-based AI coding agents. It answers: "Is our AI investment paying off?" and "Where should we invest more?"
 
 Two interfaces to the same data (with a third planned):
+
 1. **Web Dashboard** — browser SPA for deep exploration
 2. **MCP Server** — conversational analytics via tools + interactive MCP Apps
-3. **A2A Protocol** *(future scope)* — agent-to-agent interface so autonomous agents can query org analytics programmatically (see requirements.md §8)
+3. **A2A Protocol** _(future scope)_ — agent-to-agent interface so autonomous agents can query org analytics programmatically (see requirements.md §8)
 
 ## Methodology: Spec-Driven Development (SDD)
 
@@ -61,6 +62,7 @@ npm run lint          # ESLint + Prettier
 ```
 
 **Gating rule:** Every milestone must pass before proceeding:
+
 ```bash
 npm run typecheck && npm run lint && npm run test
 ```
@@ -83,14 +85,14 @@ Work follows milestones M1–M12 defined in `specs/plan.md`. Execute one milesto
 
 ### Coverage Targets
 
-| Layer | Target | Minimum |
-|-------|--------|---------|
-| Shared services | ≥90% | 80% |
-| Shared utils | ≥95% | 90% |
-| Mock generator | ≥80% | 70% |
-| Web components | ≥60% | 50% |
-| MCP tools | ≥80% | 70% |
-| Overall | ≥75% | 65% |
+| Layer           | Target | Minimum |
+| --------------- | ------ | ------- |
+| Shared services | ≥90%   | 80%     |
+| Shared utils    | ≥95%   | 90%     |
+| Mock generator  | ≥80%   | 70%     |
+| Web components  | ≥60%   | 50%     |
+| MCP tools       | ≥80%   | 70%     |
+| Overall         | ≥75%   | 65%     |
 
 ## Mock Data Conventions
 

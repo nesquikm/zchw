@@ -1,0 +1,35 @@
+{
+  "name": "agentview",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/shared",
+    "packages/web",
+    "packages/mcp-server"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w packages/web",
+    "dev:mcp": "npm run dev -w packages/mcp-server",
+    "build": "npm run build -w packages/shared && npm run build -w packages/web && npm run build -w packages/mcp-server",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc -b",
+    "lint": "eslint . && prettier --check .",
+    "lint:fix": "eslint --fix . && prettier --write .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.0.0",
+    "prettier": "^3.8.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.57.0",
+    "vitest": "^4.0.0",
+    "@vitest/coverage-v8": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

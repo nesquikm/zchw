@@ -5,8 +5,9 @@
 **AgentView** is an analytics dashboard for organizations whose engineering teams use cloud-based AI coding agents (like Claude Code on the web, Zencoder Zenflow, or similar).
 
 It answers two executive questions:
-1. *"Is our AI investment paying off?"*
-2. *"Where should we invest more — and where is AI failing?"*
+
+1. _"Is our AI investment paying off?"_
+2. _"Where should we invest more — and where is AI failing?"_
 
 AgentView is delivered through **two interfaces** to the same data:
 
@@ -18,10 +19,11 @@ The MCP interface lets engineers ask questions conversationally ("how much did m
 ### Dashboard Narrative: The Path to Autonomy
 
 The dashboard tells a progression story:
-1. **Adoption** — are people using it? *(metrics: active users/seats, activation funnel, time-to-value, capability adoption)*
-2. **Trust** — is the output good enough to merge? *(metrics: verified success rate, revert rate, autonomy distribution, intervention rate)*
-3. **Efficiency** — is it cheaper/faster than doing it manually? *(metrics: cost per verified outcome, cycle time delta, agent contribution %, value-to-cost ratio)*
-4. **Scale** — where are the bottlenecks preventing more value? *(metrics: failure mode breakdown, "where AI is failing" view, policy effectiveness, cost drivers)*
+
+1. **Adoption** — are people using it? _(metrics: active users/seats, activation funnel, time-to-value, capability adoption)_
+2. **Trust** — is the output good enough to merge? _(metrics: verified success rate, revert rate, autonomy distribution, intervention rate)_
+3. **Efficiency** — is it cheaper/faster than doing it manually? _(metrics: cost per verified outcome, cycle time delta, agent contribution %, value-to-cost ratio)_
+4. **Scale** — where are the bottlenecks preventing more value? _(metrics: failure mode breakdown, "where AI is failing" view, policy effectiveness, cost drivers)_
 
 Every metric maps to one of these stages. The executive summary shows where the organization sits on this journey.
 
@@ -34,6 +36,7 @@ The dashboard provides a single unified view — no per-role UI or auth-based cu
 - **Finance / Procurement** — tracks spend against budgets. Drives cost-per-outcome views, budget utilization with alerts, and spend forecasting.
 
 ### Out of Scope (this version)
+
 - [A2A (Agent-to-Agent) protocol](https://a2a-protocol.org/) interoperability (see Future scope in §8)
 - Per-role dashboards or role-based access control
 - Individual developer self-service analytics
@@ -78,6 +81,7 @@ These are hard constraints — the system SHALL NOT:
 The hero page answers "is this worth it?" in under 30 seconds.
 
 The system SHALL display:
+
 - **Cost per verified outcome** — total AI spend across ALL sessions in the period / count of verified outcomes in that period. This is a fully-loaded cost: it includes spend on failed, abandoned, and in-progress sessions because the organization pays for all of them. The North Star metric
 - **Value-to-cost ratio** — (estimated value of engineering time saved) / (AI spend), with visible assumptions and inputs. Explicitly labeled as model-derived estimate
 - **Cycle time delta** — change in median time-to-merge for agent-assisted work vs. baseline
@@ -87,6 +91,7 @@ The system SHALL display:
 - **Trend sparklines** for each KPI showing direction over the selected date range. Sparklines always contain up to 30 data points — for ranges shorter than 30 days, one point per day; for longer ranges, points are bucketed (e.g., 90d → 3-day buckets). For ratio metrics (cost per outcome), days/buckets with zero denominators are interpolated from neighbors or shown as gaps.
 
 **Acceptance criteria:**
+
 - **AC-1.1:** Given default filters (30 days), when the Impact Summary page loads, then 6 metric cards are visible, each with a value, trend indicator, and sparkline.
 - **AC-1.2:** Given the dashboard is loaded, when I inspect the "Cost per verified outcome" card, then it shows an "Observed" measurement badge.
 - **AC-1.3:** Given the dashboard is loaded, when I inspect the "Value-to-cost ratio" card, then it shows an "Estimated" badge and the assumptions (hourly rate, hours saved, total spend) are visible on hover or drill-down.
@@ -96,6 +101,7 @@ The system SHALL display:
 ### FR-2: Spend & Forecasting
 
 The system SHALL provide cost analytics:
+
 - Spend over time (daily/weekly granularity) with burn rate and month-end linear projection (based on trailing 7-day trend)
 - Budget utilization per team with visual threshold alerts (approaching/exceeding budget)
 - **Cost drivers** — top teams, models, and task types causing spend (replaces raw token trends)
@@ -105,6 +111,7 @@ The system SHALL provide cost analytics:
 - Token consumption available as drill-down (not top-level)
 
 **Acceptance criteria:**
+
 - **AC-2.1:** Given default filters, when the Spend page loads, then a spend-over-time area chart, budget utilization bars, cost drivers chart, model comparison, and spend-by-model donut are all visible.
 - **AC-2.2:** Given mock data, when I view budget utilization, then budgets are pro-rated to the selected date range (see §3 "Budget pro-rating"), and at least one team shows an "approaching" or "exceeding" budget alert (visual threshold indicator).
 - **AC-2.3:** Given a 30-day view, when I check the month-end projection, then the projected value ≥ the total spent so far.
@@ -114,6 +121,7 @@ The system SHALL provide cost analytics:
 ### FR-3: Adoption & Enablement
 
 The system SHALL track adoption and onboarding:
+
 - **Activation funnel**: invited → first session → first verified outcome → regular user (≥3 sessions/week)
 - **Time-to-value**: median time from invite → first merged PR
 - Daily and weekly active users over time
@@ -122,6 +130,7 @@ The system SHALL track adoption and onboarding:
 - Sessions per user per week (engagement depth)
 
 **Acceptance criteria:**
+
 - **AC-3.1:** Given default filters, when the Adoption page loads, then the activation funnel shows 4 stages with monotonically decreasing counts (invited ≥ activated ≥ first outcome ≥ regular).
 - **AC-3.2:** Given mock data, when I view time-to-value, then the median is > 0 days and displayed in human-readable format.
 - **AC-3.3:** Given mock data, when I view team usage distribution, then teams with below-average success rate are visually highlighted as "where AI is failing."
@@ -130,6 +139,7 @@ The system SHALL track adoption and onboarding:
 ### FR-4: Quality & Autonomy
 
 The system SHALL display quality and autonomy indicators:
+
 - **Verified success rate** — percentage of **completed sessions** (status = `completed` or `failed`, excluding `abandoned` and `active`) that produced a verified outcome (merged + CI pass + no revert within 48h). Sessions still in the 48h verification window are excluded from both numerator and denominator. Explicitly distinguishes between observed (git/CI events) and estimated metrics
 - **Autonomy distribution** — sessions categorized by autonomy level:
   - Level 1: Human guided every step
@@ -141,6 +151,7 @@ The system SHALL display quality and autonomy indicators:
 - Completion time trends (p50/p95 latency)
 
 **Acceptance criteria:**
+
 - **AC-4.1:** Given default filters, when the Quality page loads, then verified success rate, autonomy distribution, intervention rate, revert rate, failure mode breakdown, and p50/p95 latency are all visible.
 - **AC-4.2:** Given mock data, when I view autonomy distribution, then the three levels (guided/supervised/autonomous) sum to 100%.
 - **AC-4.3:** Given mock data, when I view failure mode breakdown, then percentages sum to 100% of failed sessions, and at least 3 failure modes are present.
@@ -150,6 +161,7 @@ The system SHALL display quality and autonomy indicators:
 ### FR-5: Governance & Compliance
 
 The system SHALL provide governance analytics:
+
 - **Policy effectiveness**: block rate (how often policies stop an action), override rate, top violated policies with trend
 - **Sensitive data exposure**: attempts blocked vs. allowed
 - Access scope audit: repositories and services agents interacted with, least-privilege compliance
@@ -157,6 +169,7 @@ The system SHALL provide governance analytics:
 - Severity distribution of security events over time
 
 **Acceptance criteria:**
+
 - **AC-5.1:** Given default filters, when the Governance page loads, then policy block rate, override rate, sensitive data stats, and event log are visible.
 - **AC-5.2:** Given mock data, when I view the event log, then entries are sorted by timestamp descending.
 - **AC-5.3:** Given mock data, when I view sensitive data exposure, then blocked + allowed = total sensitive data events.
@@ -164,11 +177,13 @@ The system SHALL provide governance analytics:
 ### FR-6: AI Integration Callout
 
 The web dashboard SHALL include a persistent banner/callout:
+
 - Promotes the MCP integration: "Explore this data conversationally — connect AgentView to Claude Desktop or any MCP-compatible AI assistant"
 - Teases upcoming feature: "AI chat with dynamic dashboard views — coming soon"
 - Dismissible, non-intrusive
 
 **Acceptance criteria:**
+
 - **AC-6.1:** Given the dashboard is loaded, when I view any page, then the MCP callout banner is visible.
 - **AC-6.2:** Given the banner is visible, when I click dismiss, then the banner disappears.
 - **AC-6.3:** Given I dismissed the banner and reload the page, then the banner remains hidden (localStorage persistence).
@@ -176,6 +191,7 @@ The web dashboard SHALL include a persistent banner/callout:
 ### FR-7: Filtering & Navigation
 
 The system SHALL support:
+
 - Global date range picker (7d, 30d, 90d, custom)
 - Team/department filter (multi-select)
 - LLM provider/model filter
@@ -183,6 +199,7 @@ The system SHALL support:
 - Sidebar navigation between dashboard sections
 
 **Acceptance criteria:**
+
 - **AC-7.1:** Given the dashboard is loaded, when I select "7d" in the date range picker, then the URL updates to include `range=7d` and all charts re-render with 7-day data.
 - **AC-7.2:** Given the URL `/dashboard/spend?range=90d&teams=platform`, when the page loads, then the date picker shows 90d selected and team filter shows "Platform" selected.
 - **AC-7.3:** Given I select multiple teams in the filter, when I copy the URL and open it in a new tab, then the same filters are applied.
@@ -191,6 +208,7 @@ The system SHALL support:
 ### FR-8: MCP Server Interface
 
 The system SHALL expose analytics via MCP tools, accessible both locally (stdio) and remotely (HTTP):
+
 - **Dual transport**: stdio for local clients (Claude Desktop, Claude Code) and HTTP (`StreamableHTTPServerTransport`) for remote/shared deployment. HTTP enables team-wide access from a single server instance and lays the groundwork for future A2A integration
 - Each dashboard section has a corresponding tool:
   - `get_impact_summary` — Impact Summary metrics
@@ -209,6 +227,7 @@ The system SHALL expose analytics via MCP tools, accessible both locally (stdio)
 - **App-only tools** for UI-driven data fetching (e.g., `poll_spend_data` with `visibility: ["app"]`)
 
 **Acceptance criteria:**
+
 - **AC-8.1:** Given a running MCP server, when an LLM calls `get_spend_breakdown` with a 30-day date range, then the tool returns both a non-empty text summary and structuredContent that validates against SpendBreakdownSchema.
 - **AC-8.2:** Given a running MCP server, when I list available tools, then all 5 model-facing tools and 5 app-only tools are registered.
 - **AC-8.3:** Given an MCP App UI for Spend, when the user changes the date range in the App UI, then the App calls `poll_spend_data` (not the model-facing tool) and charts update without LLM involvement.
@@ -225,6 +244,7 @@ The system SHALL expose analytics via MCP tools, accessible both locally (stdio)
   - This distinction is visible in the UI (e.g., subtle indicator or tooltip)
 
 **Acceptance criteria:**
+
 - **AC-9.1:** Given any chart or metric card, when I inspect it, then a data range label is visible showing the active filter period.
 - **AC-9.2:** Given a data-fetching component, when data is loading, then a skeleton/loading state is shown (no layout shift).
 - **AC-9.3:** Given a metric derived from estimates (e.g., value-to-cost ratio), when I view it, then it has an "Estimated" badge. Given an observed metric (e.g., verified success rate), then it has an "Observed" badge.
@@ -295,24 +315,29 @@ The system SHALL expose analytics via MCP tools, accessible both locally (stdio)
 ## 6. Non-Functional Requirements
 
 ### NFR-1: Performance
+
 - Initial page load (LCP) under 2 seconds
 - Chart renders complete within 500ms of data arrival
 - No layout shift after initial render (CLS ≈ 0)
 
 ### NFR-2: Responsiveness
+
 - Fully usable on desktop (1280px+)
 - Functional on tablet (768px+)
 - Mobile: read-only (charts viewable, no complex interactions required)
 
 ### NFR-3: Accessibility
+
 - Keyboard navigable (tab order, focus indicators)
 - Color-blind safe chart palettes
 - ARIA labels on interactive elements
 
 ### NFR-4: Browser Support
+
 - Chrome, Firefox, Safari, Edge (latest 2 versions)
 
 ### NFR-5: Authentication (minimal)
+
 - API key header or query param for multi-tenancy awareness
 - No login flow — out of scope for this version
 - Spec note: in production, this would integrate with SSO/SAML and map to organization-level RBAC
@@ -320,35 +345,45 @@ The system SHALL expose analytics via MCP tools, accessible both locally (stdio)
 ## 7. Metrics Rationale — Why These Matter
 
 ### Cost per verified outcome as the North Star
-Not "cost per session" or "cost per token" — cost per *actually useful* output. A merged PR that passes CI is the atomic unit of value. This is what survives CFO scrutiny.
+
+Not "cost per session" or "cost per token" — cost per _actually useful_ output. A merged PR that passes CI is the atomic unit of value. This is what survives CFO scrutiny.
 
 ### Verified success rate over task completion
+
 An agent can "complete" garbage. Verified success (merged + CI pass + no revert) measures real quality. We explicitly label this as observed (from git/CI events), not estimated.
 
 ### Autonomy distribution — the unique differentiator
+
 Neither Copilot nor Cursor tracks this. Cloud agents can operate at different autonomy levels, and organizations want to see the progression from "human does everything" to "agent handles it end-to-end." This directly maps to the "Path to Autonomy" narrative.
 
 ### Intervention rate and revert rate
-These measure the *hidden cost* of AI assistance. A session that "succeeds" but requires 8 human corrections isn't saving time. A PR that merges but gets reverted the next day isn't a real outcome. These metrics expose both.
+
+These measure the _hidden cost_ of AI assistance. A session that "succeeds" but requires 8 human corrections isn't saving time. A PR that merges but gets reverted the next day isn't a real outcome. These metrics expose both.
 
 ### "Where AI is failing" view
+
 The CEO doesn't want an all-green dashboard. They want to see exactly where to invest: which teams struggle, which task types fail, which models underperform. This is the actionable insight that drives budget decisions.
 
 ### Adoption funnel with time-to-value
+
 Raw DAU hides the real story. The funnel (invited → activated → first verified outcome → regular) reveals where adoption stalls. Adding time-to-value shows whether onboarding is fast or broken.
 
 ### Policy effectiveness over violation counts
+
 "47 policy violations" is meaningless without context. Block rate (policies are working), override rate (policies are too strict or people are circumventing), and top violated policies (where to focus) — this is what security teams actually need.
 
 ### MCP as a delivery channel
+
 Engineering leaders already live in AI tools. Letting them query analytics conversationally — and get interactive, explorable charts inline — removes the friction of switching to a separate dashboard. The pre-filled + interactive pattern (LLM sets initial params, user explores freely) is a genuinely novel UX.
 
 ### Measurement integrity
+
 Every metric labeled as observed or estimated. Executives distrust dashboards full of made-up numbers. By being transparent about what's measured vs. modeled, we build trust. The Impact Summary page is dominated by observed metrics.
 
 ## 8. MVP Scope
 
 ### Must Have (MVP)
+
 - **Impact Summary page** (FR-1) — all metrics with sparklines. The hero page
 - **Spend & Forecasting page** (FR-2) — all cost analytics
 - **AI Integration Callout** (FR-6) — MCP banner + "AI chat coming soon"
@@ -360,6 +395,7 @@ Every metric labeled as observed or estimated. Executives distrust dashboards fu
 - **CI pipeline** — lint + typecheck + test on push
 
 ### Stretch Goals (build if time permits — architecture supports them)
+
 - **Adoption & Enablement page** (FR-3) + MCP App UI
 - **Quality & Autonomy page** (FR-4) + MCP App UI
 - **Governance & Compliance page** (FR-5) + MCP App UI — simplified to event log table + policy block count
@@ -368,6 +404,7 @@ Every metric labeled as observed or estimated. Executives distrust dashboards fu
 - **Responsive tablet layout**
 
 ### Future (out of scope)
+
 - **A2A (Agent-to-Agent) protocol support** — expose analytics via [A2A](https://a2a-protocol.org/) so customers' autonomous agents can query org-level stats programmatically (e.g., a cost-monitoring agent triggers alerts, a planning agent factors AI spend into sprint capacity). MCP covers human-to-agent; A2A covers agent-to-agent
 - **AI chat with dynamic dashboard views** — embedded LLM chat in the web UI that generates custom visualizations from natural language queries (the MCP server already provides the data layer for this)
 - Real backend integrations (GitHub/GitLab, CI providers, SSO)
@@ -405,17 +442,17 @@ By end of day 4, a reviewer should be able to:
 
 Maps requirements → technical spec → tests → implementation plan milestones.
 
-| Requirement | Technical Spec Section | Test Files | Plan Milestone |
-|---|---|---|---|
-| FR-1: Impact Summary | §4 Data Model (ImpactSummarySchema, TrendSchema), §6 Service Layer (getImpactSummary), §7 Web Dashboard (routes/dashboard/index.tsx) | impact.test.ts, metric-card.test.tsx, dashboard-page.test.tsx, services.test.ts | M5, M7 |
-| FR-2: Spend & Forecasting | §4 Data Model (SpendBreakdownSchema, TeamSpendSchema, ModelSpendSchema), §6 Service Layer (getSpendBreakdown), §7 Web Dashboard (routes/dashboard/spend.tsx) | spend.test.ts, services.test.ts | M5, M8 |
-| FR-3: Adoption & Enablement | §4 Data Model (AdoptionMetricsSchema), §6 Service Layer (getAdoptionMetrics) | adoption.test.ts, services.test.ts | M5, S1 |
-| FR-4: Quality & Autonomy | §4 Data Model (QualityMetricsSchema), §6 Service Layer (getQualityMetrics) | quality.test.ts, services.test.ts | M5, S2 |
-| FR-5: Governance & Compliance | §4 Data Model (GovernanceMetricsSchema), §6 Service Layer (getGovernanceMetrics) | governance.test.ts, services.test.ts | M5, S3 |
-| FR-6: AI Callout | §7 Web Dashboard (components/layout/ai-callout.tsx) | ai-callout.test.tsx (inline in M11) | M11 |
-| FR-7: Filtering & Navigation | §7 Web Dashboard (URL Search Params, URL→Filter Mapping, Routing) | date-range-picker.test.tsx, dashboard-page.test.tsx | M6 |
-| FR-8: MCP Server | §8 MCP Server (Tool Registration, Tool Inventory, App UI Flow) | mcp-tools.test.ts | M9, M10 |
-| FR-9: Measurement Integrity | §7 Component Design Principles (measurement badges), §4 Data Model (measurementTypes in all response schemas) | metric-card.test.tsx, measurement-badge.test.tsx | M7 |
-| NFR-1: Performance | §12 Key Design Decisions (Vite + React) | (manual verification) | M12 |
-| NFR-2: Responsiveness | §7 Component Design Principles | (manual verification) | M12 |
-| NFR-3: Accessibility | §7 Component Design Principles | (manual verification) | M12 |
+| Requirement                   | Technical Spec Section                                                                                                                                       | Test Files                                                                      | Plan Milestone |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- | -------------- |
+| FR-1: Impact Summary          | §4 Data Model (ImpactSummarySchema, TrendSchema), §6 Service Layer (getImpactSummary), §7 Web Dashboard (routes/dashboard/index.tsx)                         | impact.test.ts, metric-card.test.tsx, dashboard-page.test.tsx, services.test.ts | M5, M7         |
+| FR-2: Spend & Forecasting     | §4 Data Model (SpendBreakdownSchema, TeamSpendSchema, ModelSpendSchema), §6 Service Layer (getSpendBreakdown), §7 Web Dashboard (routes/dashboard/spend.tsx) | spend.test.ts, services.test.ts                                                 | M5, M8         |
+| FR-3: Adoption & Enablement   | §4 Data Model (AdoptionMetricsSchema), §6 Service Layer (getAdoptionMetrics)                                                                                 | adoption.test.ts, services.test.ts                                              | M5, S1         |
+| FR-4: Quality & Autonomy      | §4 Data Model (QualityMetricsSchema), §6 Service Layer (getQualityMetrics)                                                                                   | quality.test.ts, services.test.ts                                               | M5, S2         |
+| FR-5: Governance & Compliance | §4 Data Model (GovernanceMetricsSchema), §6 Service Layer (getGovernanceMetrics)                                                                             | governance.test.ts, services.test.ts                                            | M5, S3         |
+| FR-6: AI Callout              | §7 Web Dashboard (components/layout/ai-callout.tsx)                                                                                                          | ai-callout.test.tsx (inline in M11)                                             | M11            |
+| FR-7: Filtering & Navigation  | §7 Web Dashboard (URL Search Params, URL→Filter Mapping, Routing)                                                                                            | date-range-picker.test.tsx, dashboard-page.test.tsx                             | M6             |
+| FR-8: MCP Server              | §8 MCP Server (Tool Registration, Tool Inventory, App UI Flow)                                                                                               | mcp-tools.test.ts                                                               | M9, M10        |
+| FR-9: Measurement Integrity   | §7 Component Design Principles (measurement badges), §4 Data Model (measurementTypes in all response schemas)                                                | metric-card.test.tsx, measurement-badge.test.tsx                                | M7             |
+| NFR-1: Performance            | §12 Key Design Decisions (Vite + React)                                                                                                                      | (manual verification)                                                           | M12            |
+| NFR-2: Responsiveness         | §7 Component Design Principles                                                                                                                               | (manual verification)                                                           | M12            |
+| NFR-3: Accessibility          | §7 Component Design Principles                                                                                                                               | (manual verification)                                                           | M12            |

@@ -6,7 +6,7 @@ This project follows [Zencoder's SDD methodology](https://zencoder.ai/blog/spec-
 
 ### Why SDD?
 
-Traditional "vibe coding" gives AI agents loose prompts and hopes for the best. SDD inverts this: the human defines *what* to build through structured specs, the agent executes *how* through a verified plan. The result is reproducible, auditable, and dramatically more reliable.
+Traditional "vibe coding" gives AI agents loose prompts and hopes for the best. SDD inverts this: the human defines _what_ to build through structured specs, the agent executes _how_ through a verified plan. The result is reproducible, auditable, and dramatically more reliable.
 
 ### Core Principle
 
@@ -98,25 +98,25 @@ S5   Dark Mode                    ─── stretch
 
 If time is tight:
 
-| After | If behind | Cut |
-|-------|-----------|-----|
-| M5 | Services slow | Skip M10 (MCP App UIs) — text-only MCP is fine |
-| M8 | Web behind | Skip chart polish — functional > pretty |
-| M9 | MCP tools work | Skip M10, go to M11+M12 |
-| M10 | Apps buggy | Ship Impact App only, cut Spend App |
+| After | If behind      | Cut                                            |
+| ----- | -------------- | ---------------------------------------------- |
+| M5    | Services slow  | Skip M10 (MCP App UIs) — text-only MCP is fine |
+| M8    | Web behind     | Skip chart polish — functional > pretty        |
+| M9    | MCP tools work | Skip M10, go to M11+M12                        |
+| M10   | Apps buggy     | Ship Impact App only, cut Spend App            |
 
 ## Slash Commands
 
 The project includes custom skills for AI-assisted development:
 
-| Command | Purpose |
-|---------|---------|
-| `/milestone M3` | Execute a specific milestone end-to-end |
-| `/tdd tests/unit/shared/services/impact.test.ts` | Run a TDD cycle for a specific test/feature |
-| `/gate-check` | Run typecheck + lint + test and report pass/fail |
-| `/gate-check --fix` | Same, but auto-fix lint issues |
-| `/spec-review FR-1` | Audit implementation against a specific requirement |
-| `/spec-review all` | Full audit of all requirements |
+| Command                                          | Purpose                                             |
+| ------------------------------------------------ | --------------------------------------------------- |
+| `/milestone M3`                                  | Execute a specific milestone end-to-end             |
+| `/tdd tests/unit/shared/services/impact.test.ts` | Run a TDD cycle for a specific test/feature         |
+| `/gate-check`                                    | Run typecheck + lint + test and report pass/fail    |
+| `/gate-check --fix`                              | Same, but auto-fix lint issues                      |
+| `/spec-review FR-1`                              | Audit implementation against a specific requirement |
+| `/spec-review all`                               | Full audit of all requirements                      |
 
 ## Testing Conventions
 
@@ -129,14 +129,14 @@ The project includes custom skills for AI-assisted development:
 
 ### Coverage Targets
 
-| Layer | Target | Minimum |
-|-------|--------|---------|
-| Shared services | ≥90% | 80% |
-| Shared utils | ≥95% | 90% |
-| Mock generator | ≥80% | 70% |
-| Web components | ≥60% | 50% |
-| MCP tools | ≥80% | 70% |
-| Overall | ≥75% | 65% |
+| Layer           | Target | Minimum |
+| --------------- | ------ | ------- |
+| Shared services | ≥90%   | 80%     |
+| Shared utils    | ≥95%   | 90%     |
+| Mock generator  | ≥80%   | 70%     |
+| Web components  | ≥60%   | 50%     |
+| MCP tools       | ≥80%   | 70%     |
+| Overall         | ≥75%   | 65%     |
 
 ## Project Commands
 
@@ -151,11 +151,11 @@ npm run lint          # ESLint + Prettier
 
 ## Key Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| Vite 7 + React 19, not Next.js | Client-side SPA, no SSR needed. Simpler monorepo build. |
+| Decision                          | Rationale                                                                    |
+| --------------------------------- | ---------------------------------------------------------------------------- |
+| Vite 7 + React 19, not Next.js    | Client-side SPA, no SSR needed. Simpler monorepo build.                      |
 | TanStack Router, not React Router | Type-safe search params with Zod validation — perfect for dashboard filters. |
-| Zod 4 schemas as source of truth | Single contract between web, MCP, and tests. No type drift. |
-| Recharts in both web and MCP Apps | Consistent charting API, shared patterns, one learning curve. |
-| Seeded mock data, not random | Deterministic tests, reproducible screenshots, stable demos. |
-| Monorepo with shared package | Same services power both interfaces. Change once, both update. |
+| Zod 4 schemas as source of truth  | Single contract between web, MCP, and tests. No type drift.                  |
+| Recharts in both web and MCP Apps | Consistent charting API, shared patterns, one learning curve.                |
+| Seeded mock data, not random      | Deterministic tests, reproducible screenshots, stable demos.                 |
+| Monorepo with shared package      | Same services power both interfaces. Change once, both update.               |

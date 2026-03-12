@@ -2,7 +2,7 @@
 name: milestone
 description: Execute a specific milestone from the implementation plan. Reads the plan, executes all tasks in TDD order, and runs gate checks. Use to build the project milestone by milestone.
 user-invocable: true
-argument-hint: "<milestone number, e.g. M1, M2, M3>"
+argument-hint: '<milestone number, e.g. M1, M2, M3>'
 ---
 
 # Execute Milestone

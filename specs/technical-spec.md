@@ -28,23 +28,23 @@ Both interfaces call the same service functions. The web dashboard calls them di
 
 ## 2. Tech Stack
 
-| Layer | Choice | Rationale |
-|-------|--------|-----------|
-| Language | TypeScript 5 (strict) | Zencoder's stack; type safety across shared layer |
-| Web framework | Vite 7 + React 19 | Fast dev, no SSR needed, consistent with MCP App UIs |
-| UI components | shadcn/ui + Tailwind CSS 4 | Production polish with minimal effort, composable. Tailwind v4 uses CSS-first config (`@tailwindcss/vite` plugin, no `tailwind.config.ts`) |
-| Charts | Recharts 3 | React-native, composable, good TS support. Used in both web and MCP App UIs for consistency |
-| Routing | TanStack Router | End-to-end type-safe params/search params, built-in Zod validation for URL filters |
-| Server state | TanStack Query v5 | Caching, loading states, refetch on filter change |
-| URL state | TanStack Router search params | Bookmarkable/shareable filter state with type safety |
-| Validation | Zod 4 | Shared schemas for types, API contracts, URL params. MCP SDK ^1.27.1 supports Zod 4 natively |
-| MCP SDK | @modelcontextprotocol/sdk (^1.27.1) | MCP server implementation. Uses `server.registerTool()` (not deprecated `server.tool()`) |
-| MCP Apps | @modelcontextprotocol/ext-apps (^1.2.2) | MCP App extension for rich UI in MCP clients. Server: `registerAppTool`, `registerAppResource`. Client: `App` class + React hooks (`useApp`) |
-| MCP App build | Vite 7 + vite-plugin-singlefile (^2.3.0) | Bundles each App UI into one HTML file |
-| Unit tests | Vitest 4 + React Testing Library | Fast, TS-native, behavior-focused |
-| E2E tests | Playwright (stretch) | Browser-based acceptance tests |
-| CI | GitHub Actions | Lint + typecheck + test on push |
-| Package manager | npm workspaces | Simple monorepo, no Turborepo overhead |
+| Layer           | Choice                                   | Rationale                                                                                                                                    |
+| --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Language        | TypeScript 5 (strict)                    | Zencoder's stack; type safety across shared layer                                                                                            |
+| Web framework   | Vite 7 + React 19                        | Fast dev, no SSR needed, consistent with MCP App UIs                                                                                         |
+| UI components   | shadcn/ui + Tailwind CSS 4               | Production polish with minimal effort, composable. Tailwind v4 uses CSS-first config (`@tailwindcss/vite` plugin, no `tailwind.config.ts`)   |
+| Charts          | Recharts 3                               | React-native, composable, good TS support. Used in both web and MCP App UIs for consistency                                                  |
+| Routing         | TanStack Router                          | End-to-end type-safe params/search params, built-in Zod validation for URL filters                                                           |
+| Server state    | TanStack Query v5                        | Caching, loading states, refetch on filter change                                                                                            |
+| URL state       | TanStack Router search params            | Bookmarkable/shareable filter state with type safety                                                                                         |
+| Validation      | Zod 4                                    | Shared schemas for types, API contracts, URL params. MCP SDK ^1.27.1 supports Zod 4 natively                                                 |
+| MCP SDK         | @modelcontextprotocol/sdk (^1.27.1)      | MCP server implementation. Uses `server.registerTool()` (not deprecated `server.tool()`)                                                     |
+| MCP Apps        | @modelcontextprotocol/ext-apps (^1.2.2)  | MCP App extension for rich UI in MCP clients. Server: `registerAppTool`, `registerAppResource`. Client: `App` class + React hooks (`useApp`) |
+| MCP App build   | Vite 7 + vite-plugin-singlefile (^2.3.0) | Bundles each App UI into one HTML file                                                                                                       |
+| Unit tests      | Vitest 4 + React Testing Library         | Fast, TS-native, behavior-focused                                                                                                            |
+| E2E tests       | Playwright (stretch)                     | Browser-based acceptance tests                                                                                                               |
+| CI              | GitHub Actions                           | Lint + typecheck + test on push                                                                                                              |
+| Package manager | npm workspaces                           | Simple monorepo, no Turborepo overhead                                                                                                       |
 
 ## 3. Project Structure
 
@@ -226,17 +226,17 @@ All types defined as Zod schemas in `packages/shared/src/types/`. TypeScript typ
 ```typescript
 const TeamSchema = z.object({
   id: z.string(),
-  name: z.string(),                    // "Platform", "Mobile", "Backend", "Frontend", "Data"
-  department: z.string(),              // "Engineering"
+  name: z.string(), // "Platform", "Mobile", "Backend", "Frontend", "Data"
+  department: z.string(), // "Engineering"
   memberCount: z.number(),
-  monthlyBudget: z.number(),           // USD
+  monthlyBudget: z.number(), // USD
 });
 
 const OrganizationSchema = z.object({
   id: z.string(),
-  name: z.string(),                    // "Acme Corp"
+  name: z.string(), // "Acme Corp"
   plan: z.enum(['starter', 'professional', 'enterprise']),
-  totalSeats: z.number(),              // 50
+  totalSeats: z.number(), // 50
   teams: z.array(TeamSchema),
 });
 ```
@@ -250,8 +250,8 @@ const UserSchema = z.object({
   email: z.string(),
   teamId: z.string(),
   role: z.enum(['engineer', 'senior_engineer', 'staff_engineer', 'lead', 'manager']),
-  invitedAt: z.string(),               // ISO date — when they got access
-  activatedAt: z.string().nullable(),  // null = invited but never used
+  invitedAt: z.string(), // ISO date — when they got access
+  activatedAt: z.string().nullable(), // null = invited but never used
   firstOutcomeAt: z.string().nullable(), // null = never produced a verified outcome
   lastActiveAt: z.string().nullable(),
 });
@@ -265,13 +265,21 @@ const AutonomyLevelSchema = z.enum(['guided', 'supervised', 'autonomous']);
 const SessionStatusSchema = z.enum(['active', 'completed', 'failed', 'abandoned']);
 
 const TaskTypeSchema = z.enum([
-  'code_generation', 'code_review', 'test_writing',
-  'debugging', 'documentation', 'refactoring'
+  'code_generation',
+  'code_review',
+  'test_writing',
+  'debugging',
+  'documentation',
+  'refactoring',
 ]);
 
 const FailureModeSchema = z.enum([
-  'none', 'agent_error', 'infra_issue', 'policy_block',
-  'test_failure', 'human_abandoned'
+  'none',
+  'agent_error',
+  'infra_issue',
+  'policy_block',
+  'test_failure',
+  'human_abandoned',
 ]);
 
 const AgentSessionSchema = z.object({
@@ -279,17 +287,17 @@ const AgentSessionSchema = z.object({
   userId: z.string(),
   teamId: z.string(),
   repositoryId: z.string(),
-  startedAt: z.string(),               // ISO datetime
+  startedAt: z.string(), // ISO datetime
   endedAt: z.string().nullable(),
   status: SessionStatusSchema,
   taskType: TaskTypeSchema,
   autonomyLevel: AutonomyLevelSchema,
-  provider: z.string(),                // 'anthropic', 'openai', 'google'
-  model: z.string(),                   // 'claude-sonnet-4-5', 'gpt-4o', 'gemini-2.0-flash'
+  provider: z.string(), // 'anthropic', 'openai', 'google'
+  model: z.string(), // 'claude-sonnet-4-5', 'gpt-4o', 'gemini-2.0-flash'
   promptTokens: z.number(),
   completionTokens: z.number(),
   estimatedCostUSD: z.number(),
-  interventionCount: z.number(),       // human corrections during session
+  interventionCount: z.number(), // human corrections during session
   failureMode: FailureModeSchema,
   // PR outcome: at most one PR per session for MVP. Requirements note sessions
   // can produce 0+ PRs; this 1:1 simplification is sufficient for mock data and
@@ -297,9 +305,9 @@ const AgentSessionSchema = z.object({
   // linked via sessionId. Fields are null/false if session didn't produce a PR.
   prOpened: z.boolean(),
   prMerged: z.boolean(),
-  ciPassed: z.boolean().nullable(),    // null if no CI run
+  ciPassed: z.boolean().nullable(), // null if no CI run
   revertedWithin48h: z.boolean(),
-  prMergedAt: z.string().nullable(),  // ISO datetime when PR was merged; null if not merged
+  prMergedAt: z.string().nullable(), // ISO datetime when PR was merged; null if not merged
   // Verification status is derived by the service layer, not stored:
   //   pending  = prMerged && now - prMergedAt < 48h && !revertedWithin48h
   //   verified = prMerged && ciPassed && now - prMergedAt >= 48h && !revertedWithin48h
@@ -322,9 +330,13 @@ const AgentSessionSchema = z.object({
 
 ```typescript
 const SecurityEventTypeSchema = z.enum([
-  'policy_block', 'policy_override',
-  'sensitive_data_blocked', 'sensitive_data_allowed',
-  'shell_command', 'external_api_call', 'file_modification'
+  'policy_block',
+  'policy_override',
+  'sensitive_data_blocked',
+  'sensitive_data_allowed',
+  'shell_command',
+  'external_api_call',
+  'file_modification',
 ]);
 
 const SecurityEventSchema = z.object({
@@ -335,7 +347,7 @@ const SecurityEventSchema = z.object({
   eventType: SecurityEventTypeSchema,
   severity: z.enum(['low', 'medium', 'high', 'critical']),
   description: z.string(),
-  policyId: z.string().nullable(),     // which policy was triggered
+  policyId: z.string().nullable(), // which policy was triggered
   repository: z.string(),
 });
 ```
@@ -349,14 +361,15 @@ const NonAgentPRSchema = z.object({
   id: z.string(),
   teamId: z.string(),
   repository: z.string(),
-  mergedAt: z.string(),                // ISO datetime
+  mergedAt: z.string(), // ISO datetime
   linesAdded: z.number(),
   linesDeleted: z.number(),
-  timeToMergeMinutes: z.number(),      // for cycle time baseline
+  timeToMergeMinutes: z.number(), // for cycle time baseline
 });
 ```
 
 The mock generator produces ~3,000 non-agent PRs over 90 days (roughly 1/5 of agent session volume), distributed across teams proportionally. These are used only for:
+
 - **Cycle time delta**: median agent `timeToMergeMinutes` vs. median non-agent `timeToMergeMinutes`
 - **Agent contribution %**: agent `linesAdded` / (agent `linesAdded` + non-agent `linesAdded`)
 
@@ -364,7 +377,7 @@ The mock generator produces ~3,000 non-agent PRs over 90 days (roughly 1/5 of ag
 
 ```typescript
 const DateRangeSchema = z.object({
-  from: z.string(),                    // ISO date
+  from: z.string(), // ISO date
   to: z.string(),
 });
 
@@ -393,32 +406,34 @@ Each service returns a typed response. Example for Impact Summary:
 const TrendSchema = z.number().nullable();
 
 const ImpactSummarySchema = z.object({
-  costPerVerifiedOutcome: z.number(),           // USD
+  costPerVerifiedOutcome: z.number(), // USD
   costPerVerifiedOutcomeTrend: TrendSchema,
-  valueToCostRatio: z.number(),                  // e.g. 4.2
+  valueToCostRatio: z.number(), // e.g. 4.2
   valueToCostRatioTrend: TrendSchema,
-  valueToCostRatioInputs: z.object({             // transparent assumptions
+  valueToCostRatioInputs: z.object({
+    // transparent assumptions
     hourlyRate: z.number(),
     estimatedHoursSaved: z.number(),
     totalSpend: z.number(),
   }),
-  cycleTimeDeltaPercent: z.number(),             // e.g. -23 means 23% faster
-  cycleTimeDeltaTrend: TrendSchema,              // trend of the delta itself
-  agentContributionPercent: z.number(),          // e.g. 34.5
+  cycleTimeDeltaPercent: z.number(), // e.g. -23 means 23% faster
+  cycleTimeDeltaTrend: TrendSchema, // trend of the delta itself
+  agentContributionPercent: z.number(), // e.g. 34.5
   agentContributionTrend: TrendSchema,
-  activeUsers: z.number(),                        // distinct users with ≥1 session in the period
+  activeUsers: z.number(), // distinct users with ≥1 session in the period
   totalSeats: z.number(),
   adoptionPercent: z.number(),
   adoptionTrend: TrendSchema,
-  totalSpend: z.number(),                        // USD — total AI spend in period (source of truth for cross-service consistency with SpendBreakdown)
+  totalSpend: z.number(), // USD — total AI spend in period (source of truth for cross-service consistency with SpendBreakdown)
   verifiedOutcomes: z.number(),
   verifiedOutcomesTrend: TrendSchema,
-  periodLabel: z.string(),                       // "Feb 1 – Feb 28, 2026"
-  sparklines: z.object({                         // Up to 30 data points, adaptive to date range:
-                                                   //   ≤30 days → 1 point/day
-                                                   //   >30 days → bucketed into 30 equal intervals
-                                                   // For ratio metrics (costPerOutcome), buckets with
-                                                   // zero denominators use null (rendered as gaps).
+  periodLabel: z.string(), // "Feb 1 – Feb 28, 2026"
+  sparklines: z.object({
+    // Up to 30 data points, adaptive to date range:
+    //   ≤30 days → 1 point/day
+    //   >30 days → bucketed into 30 equal intervals
+    // For ratio metrics (costPerOutcome), buckets with
+    // zero denominators use null (rendered as gaps).
     costPerOutcome: z.array(z.number().nullable()),
     valueToCost: z.array(z.number().nullable()),
     cycleTimeDelta: z.array(z.number().nullable()),
@@ -438,9 +453,9 @@ const TeamSpendSchema = z.object({
   teamName: z.string(),
   spend: z.number(),
   monthlyBudget: z.number(),
-  proRatedBudget: z.number(),           // budget × daysInRange / daysInMonth
-  utilizationPercent: z.number(),        // spend / proRatedBudget × 100
-  status: z.enum(['normal', 'approaching', 'exceeding']),  // >80% approaching, >100% exceeding
+  proRatedBudget: z.number(), // budget × daysInRange / daysInMonth
+  utilizationPercent: z.number(), // spend / proRatedBudget × 100
+  status: z.enum(['normal', 'approaching', 'exceeding']), // >80% approaching, >100% exceeding
   costPerOutcome: z.number().nullable(), // null if no verified outcomes
 });
 
@@ -450,7 +465,7 @@ const ModelSpendSchema = z.object({
   spend: z.number(),
   spendPercent: z.number(),
   sessionCount: z.number(),
-  successRate: z.number(),               // verified outcomes / completed sessions (same denominator as Quality's verifiedSuccessRate)
+  successRate: z.number(), // verified outcomes / completed sessions (same denominator as Quality's verifiedSuccessRate)
   costPerOutcome: z.number().nullable(),
 });
 
@@ -462,12 +477,15 @@ const SpendBreakdownSchema = z.object({
   spendByDay: z.array(z.object({ date: z.string(), spend: z.number() })),
   spendByTeam: z.array(TeamSpendSchema),
   spendByModel: z.array(ModelSpendSchema),
-  costDrivers: z.array(z.object({        // top spend categories
-    category: z.string(),                 // team name, model name, or task type
-    type: z.enum(['team', 'model', 'taskType']),
-    spend: z.number(),
-    spendPercent: z.number(),
-  })),
+  costDrivers: z.array(
+    z.object({
+      // top spend categories
+      category: z.string(), // team name, model name, or task type
+      type: z.enum(['team', 'model', 'taskType']),
+      spend: z.number(),
+      spendPercent: z.number(),
+    }),
+  ),
   periodLabel: z.string(),
   measurementTypes: z.record(z.enum(['observed', 'estimated'])),
 });
@@ -479,28 +497,34 @@ const SpendBreakdownSchema = z.object({
 const AdoptionMetricsSchema = z.object({
   funnel: z.object({
     invited: z.number(),
-    activated: z.number(),               // at least 1 session
-    firstOutcome: z.number(),            // at least 1 verified outcome
-    regular: z.number(),                 // ≥3 sessions/week
+    activated: z.number(), // at least 1 session
+    firstOutcome: z.number(), // at least 1 verified outcome
+    regular: z.number(), // ≥3 sessions/week
   }),
-  timeToValueMedianDays: z.number().nullable(),  // null if no users reached first outcome
-  activeUsersOverTime: z.array(z.object({
-    date: z.string(),
-    dau: z.number(),
-    wau: z.number(),
-  })),
-  capabilityAdoption: z.array(z.object({
-    taskType: z.string(),                // from TaskTypeSchema
-    sessionCount: z.number(),
-    percent: z.number(),
-  })),
-  teamUsage: z.array(z.object({
-    teamId: z.string(),
-    teamName: z.string(),
-    sessionsPerUserPerWeek: z.number(),
-    successRate: z.number(),
-    isFailingHighlight: z.boolean(),     // below-average success rate
-  })),
+  timeToValueMedianDays: z.number().nullable(), // null if no users reached first outcome
+  activeUsersOverTime: z.array(
+    z.object({
+      date: z.string(),
+      dau: z.number(),
+      wau: z.number(),
+    }),
+  ),
+  capabilityAdoption: z.array(
+    z.object({
+      taskType: z.string(), // from TaskTypeSchema
+      sessionCount: z.number(),
+      percent: z.number(),
+    }),
+  ),
+  teamUsage: z.array(
+    z.object({
+      teamId: z.string(),
+      teamName: z.string(),
+      sessionsPerUserPerWeek: z.number(),
+      successRate: z.number(),
+      isFailingHighlight: z.boolean(), // below-average success rate
+    }),
+  ),
   periodLabel: z.string(),
   measurementTypes: z.record(z.enum(['observed', 'estimated'])),
 });
@@ -510,22 +534,24 @@ const AdoptionMetricsSchema = z.object({
 
 ```typescript
 const QualityMetricsSchema = z.object({
-  verifiedSuccessRate: z.number(),       // 0–1
+  verifiedSuccessRate: z.number(), // 0–1
   verifiedSuccessRateTrend: TrendSchema,
   autonomyDistribution: z.object({
-    guided: z.number(),                  // percentage (sums to 100)
+    guided: z.number(), // percentage (sums to 100)
     supervised: z.number(),
     autonomous: z.number(),
   }),
-  interventionRate: z.number(),          // avg interventions per session
+  interventionRate: z.number(), // avg interventions per session
   interventionRateTrend: TrendSchema,
-  revertRate: z.number(),                // 0–1, reverted / (verified + reverted). See requirements §3 "Revert"
+  revertRate: z.number(), // 0–1, reverted / (verified + reverted). See requirements §3 "Revert"
   revertRateTrend: TrendSchema,
-  failureModes: z.array(z.object({
-    mode: z.string(),                    // from FailureModeSchema (excluding 'none')
-    count: z.number(),
-    percent: z.number(),
-  })),
+  failureModes: z.array(
+    z.object({
+      mode: z.string(), // from FailureModeSchema (excluding 'none')
+      count: z.number(),
+      percent: z.number(),
+    }),
+  ),
   completionTime: z.object({
     p50Minutes: z.number(),
     p95Minutes: z.number(),
@@ -539,40 +565,49 @@ const QualityMetricsSchema = z.object({
 
 ```typescript
 const GovernanceMetricsSchema = z.object({
-  policyBlockRate: z.number(),           // 0–1
-  policyOverrideRate: z.number(),        // 0–1
-  topViolatedPolicies: z.array(z.object({
-    policyId: z.string(),
-    description: z.string(),
-    count: z.number(),
-    trend: TrendSchema,
-  })),
+  policyBlockRate: z.number(), // 0–1
+  policyOverrideRate: z.number(), // 0–1
+  topViolatedPolicies: z.array(
+    z.object({
+      policyId: z.string(),
+      description: z.string(),
+      count: z.number(),
+      trend: TrendSchema,
+    }),
+  ),
   sensitiveData: z.object({
     blocked: z.number(),
     allowed: z.number(),
     total: z.number(),
   }),
-  accessScope: z.array(z.object({
-    repository: z.string(),
-    sessionCount: z.number(),
-    eventCount: z.number(),
-  })),
-  eventLog: z.array(z.object({           // sorted by timestamp descending
-    id: z.string(),
-    timestamp: z.string(),
-    userId: z.string(),
-    eventType: z.string(),
-    severity: z.string(),
-    description: z.string(),
-    repository: z.string(),
-  })),
-  severityOverTime: z.array(z.object({
-    date: z.string(),
-    low: z.number(),
-    medium: z.number(),
-    high: z.number(),
-    critical: z.number(),
-  })),
+  accessScope: z.array(
+    z.object({
+      repository: z.string(),
+      sessionCount: z.number(),
+      eventCount: z.number(),
+    }),
+  ),
+  eventLog: z.array(
+    z.object({
+      // sorted by timestamp descending
+      id: z.string(),
+      timestamp: z.string(),
+      userId: z.string(),
+      eventType: z.string(),
+      severity: z.string(),
+      description: z.string(),
+      repository: z.string(),
+    }),
+  ),
+  severityOverTime: z.array(
+    z.object({
+      date: z.string(),
+      low: z.number(),
+      medium: z.number(),
+      high: z.number(),
+      critical: z.number(),
+    }),
+  ),
   periodLabel: z.string(),
   measurementTypes: z.record(z.enum(['observed', 'estimated'])),
 });
@@ -590,10 +625,11 @@ All randomness uses a seeded mulberry32 generator:
 function createRng(seed: number): () => number {
   let s = seed;
   return () => {
-    s |= 0; s = s + 0x6D2B79F5 | 0;
-    let t = Math.imul(s ^ s >>> 15, 1 | s);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    s |= 0;
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
 ```
@@ -612,29 +648,29 @@ The generator accepts a `now` parameter (default: `2026-03-01T00:00:00Z`). The 9
 
 The generator models real-world behavior:
 
-| Pattern | Implementation |
-|---------|---------------|
-| Weekday > weekend | 3-5x more sessions on weekdays |
-| S-curve adoption | `1 / (1 + e^(-k(t - t0)))` for user activation over 90 days |
-| Team variance | Platform: power users (8 sessions/user/day). Data: barely adopted (1 session/user/day) |
+| Pattern                | Implementation                                                                         |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| Weekday > weekend      | 3-5x more sessions on weekdays                                                         |
+| S-curve adoption       | `1 / (1 + e^(-k(t - t0)))` for user activation over 90 days                            |
+| Team variance          | Platform: power users (8 sessions/user/day). Data: barely adopted (1 session/user/day) |
 | Model quality tradeoff | Claude Sonnet: $0.08/session avg, 88% success. GPT-4o mini: $0.02/session, 71% success |
-| Autonomy progression | Early days: mostly Level 1. By day 90: 40% Level 2, 15% Level 3 |
-| Error rate by model | Cheaper models have higher error rates |
-| Time-of-day patterns | Peak 10am-4pm, low overnight |
-| Cycle time improvement | Agent-assisted PRs merge 20-30% faster than baseline |
+| Autonomy progression   | Early days: mostly Level 1. By day 90: 40% Level 2, 15% Level 3                        |
+| Error rate by model    | Cheaper models have higher error rates                                                 |
+| Time-of-day patterns   | Peak 10am-4pm, low overnight                                                           |
+| Cycle time improvement | Agent-assisted PRs merge 20-30% faster than baseline                                   |
 
 ### Data Volume
 
-| Entity | Count |
-|--------|-------|
-| Organizations | 1 ("Acme Corp") |
-| Teams | 5 |
-| Users | 30 (across 5 teams) |
-| Sessions | ~15,000 (90 days) |
-| Non-agent PRs | ~3,000 (baseline for cycle time + contribution %) |
+| Entity          | Count                                                    |
+| --------------- | -------------------------------------------------------- |
+| Organizations   | 1 ("Acme Corp")                                          |
+| Teams           | 5                                                        |
+| Users           | 30 (across 5 teams)                                      |
+| Sessions        | ~15,000 (90 days)                                        |
+| Non-agent PRs   | ~3,000 (baseline for cycle time + contribution %)        |
 | Security events | ~500 (enough for meaningful severity/time distributions) |
-| LLM providers | 3 (Anthropic, OpenAI, Google) |
-| Models | 5 |
+| LLM providers   | 3 (Anthropic, OpenAI, Google)                            |
+| Models          | 5                                                        |
 
 ## 6. Service Layer
 
@@ -655,13 +691,13 @@ All services accept an optional `now` parameter (default: the mock generator's `
 
 ### Service inventory
 
-| Service | Input | Output | Key computations |
-|---------|-------|--------|-----------------|
-| `getImpactSummary` | Filters, now? | ImpactSummary | FR-1: Cost per outcome, value-to-cost ratio, cycle time delta, agent contribution %, all 6 trends, sparklines |
-| `getSpendBreakdown` | Filters, now? | SpendBreakdown | FR-2: Spend over time, by team (with pro-rated budget), by model, cost drivers, linear projection |
-| `getAdoptionMetrics` | Filters, now? | AdoptionMetrics | FR-3: Funnel counts, time-to-value, DAU/WAU series, capability breakdown, team success rates |
-| `getQualityMetrics` | Filters, now? | QualityMetrics | FR-4: Verified success rate, autonomy distribution, intervention rate, revert rate, failure modes, p50/p95 |
-| `getGovernanceMetrics` | Filters, now? | GovernanceMetrics | FR-5: Block/override rates, sensitive data stats, access scope, event log |
+| Service                | Input         | Output            | Key computations                                                                                              |
+| ---------------------- | ------------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| `getImpactSummary`     | Filters, now? | ImpactSummary     | FR-1: Cost per outcome, value-to-cost ratio, cycle time delta, agent contribution %, all 6 trends, sparklines |
+| `getSpendBreakdown`    | Filters, now? | SpendBreakdown    | FR-2: Spend over time, by team (with pro-rated budget), by model, cost drivers, linear projection             |
+| `getAdoptionMetrics`   | Filters, now? | AdoptionMetrics   | FR-3: Funnel counts, time-to-value, DAU/WAU series, capability breakdown, team success rates                  |
+| `getQualityMetrics`    | Filters, now? | QualityMetrics    | FR-4: Verified success rate, autonomy distribution, intervention rate, revert rate, failure modes, p50/p95    |
+| `getGovernanceMetrics` | Filters, now? | GovernanceMetrics | FR-5: Block/override rates, sensitive data stats, access scope, event log                                     |
 
 ### Linear projection
 
@@ -695,19 +731,20 @@ function projectMonthEnd(dailySpend: number[], today: Date): number {
 All filters sync to URL via TanStack Router search params with Zod validation:
 
 ```typescript
-const dashboardSearchSchema = z.object({
-  from: z.string().optional(),        // ISO date — required when range='custom'
-  to: z.string().optional(),          // ISO date — required when range='custom'
-  teams: z.string().optional(),       // comma-separated team IDs
-  models: z.string().optional(),      // comma-separated model names
-  range: z.enum(['7d', '30d', '90d', 'custom']).optional().default('30d'),
-}).refine(
-  (d) => d.range !== 'custom' || (d.from && d.to),
-  { message: 'from and to are required when range is custom' }
-).refine(
-  (d) => !d.from || !d.to || d.from <= d.to,
-  { message: 'from must be before or equal to to' }
-);
+const dashboardSearchSchema = z
+  .object({
+    from: z.string().optional(), // ISO date — required when range='custom'
+    to: z.string().optional(), // ISO date — required when range='custom'
+    teams: z.string().optional(), // comma-separated team IDs
+    models: z.string().optional(), // comma-separated model names
+    range: z.enum(['7d', '30d', '90d', 'custom']).optional().default('30d'),
+  })
+  .refine((d) => d.range !== 'custom' || (d.from && d.to), {
+    message: 'from and to are required when range is custom',
+  })
+  .refine((d) => !d.from || !d.to || d.from <= d.to, {
+    message: 'from must be before or equal to to',
+  });
 ```
 
 Example URL: `/dashboard/spend?range=90d&teams=platform,mobile&models=claude-sonnet-4-5`
@@ -719,9 +756,10 @@ The web dashboard converts URL search params to `FiltersSchema` before calling s
 ```typescript
 function urlParamsToFilters(params: DashboardSearch, now: Date): Filters {
   // Convert range preset to absolute dates
-  const dateRange = params.range === 'custom'
-    ? { from: params.from!, to: params.to! }
-    : computeDateRange(params.range ?? '30d', now);
+  const dateRange =
+    params.range === 'custom'
+      ? { from: params.from!, to: params.to! }
+      : computeDateRange(params.range ?? '30d', now);
 
   return {
     dateRange,
@@ -782,9 +820,9 @@ if (process.argv.includes('--http')) {
 }
 ```
 
-| Transport | Use case | How to connect |
-|-----------|----------|----------------|
-| **stdio** (default) | Local — Claude Desktop, Claude Code | Add to `claude_desktop_config.json` as a command |
+| Transport           | Use case                                               | How to connect                                    |
+| ------------------- | ------------------------------------------------------ | ------------------------------------------------- |
+| **stdio** (default) | Local — Claude Desktop, Claude Code                    | Add to `claude_desktop_config.json` as a command  |
 | **HTTP** (`--http`) | Remote — team-wide deployment, CI agents, A2A (future) | Any MCP client connects to `http://host:3001/mcp` |
 
 HTTP transport enables deploying the MCP server as a shared service — one instance serves the whole team. This is also the foundation for future [A2A protocol](https://a2a-protocol.org/) support, where autonomous agents query analytics over HTTP without human involvement.
@@ -815,60 +853,76 @@ export function registerSpendTools(server: McpServer) {
   const resourceUri = 'ui://agentview/spend';
 
   // Model-facing tool: LLM calls this, host renders the App UI
-  registerAppTool(server, 'get_spend_breakdown', {
-    title: 'Get Spend Breakdown',
-    description: 'Returns AI agent spending breakdown by team, model, and time period with budget utilization and month-end forecast',
-    inputSchema: {
-      dateRange: McpFiltersSchema.shape.dateRange,
-      teamIds: McpFiltersSchema.shape.teamIds,
-      models: McpFiltersSchema.shape.models,
-      providers: McpFiltersSchema.shape.providers,
+  registerAppTool(
+    server,
+    'get_spend_breakdown',
+    {
+      title: 'Get Spend Breakdown',
+      description:
+        'Returns AI agent spending breakdown by team, model, and time period with budget utilization and month-end forecast',
+      inputSchema: {
+        dateRange: McpFiltersSchema.shape.dateRange,
+        teamIds: McpFiltersSchema.shape.teamIds,
+        models: McpFiltersSchema.shape.models,
+        providers: McpFiltersSchema.shape.providers,
+      },
+      outputSchema: SpendBreakdownSchema,
+      _meta: { ui: { resourceUri } },
     },
-    outputSchema: SpendBreakdownSchema,
-    _meta: { ui: { resourceUri } },
-  }, (params) => {
-    const mcpFilters = McpFiltersSchema.parse(params);
-    const filters = applyDefaultFilters(mcpFilters); // fills in dateRange if missing
-    const data = getSpendBreakdown(filters);
-    return {
-      content: [{ type: 'text', text: formatSpendSummary(data) }],
-      structuredContent: data,  // validated against outputSchema by the SDK
-    };
-  });
+    (params) => {
+      const mcpFilters = McpFiltersSchema.parse(params);
+      const filters = applyDefaultFilters(mcpFilters); // fills in dateRange if missing
+      const data = getSpendBreakdown(filters);
+      return {
+        content: [{ type: 'text', text: formatSpendSummary(data) }],
+        structuredContent: data, // validated against outputSchema by the SDK
+      };
+    },
+  );
 
   // App-only tool: UI calls this directly to refresh with changed filters.
   // visibility: ['app'] hides this from the model — only the App UI can invoke it.
-  registerAppTool(server, 'poll_spend_data', {
-    title: 'Poll Spend Data',
-    description: 'Returns spend data for UI polling with updated filters',
-    inputSchema: {
-      dateRange: FiltersSchema.shape.dateRange,
-      teamIds: FiltersSchema.shape.teamIds,
-      models: FiltersSchema.shape.models,
-      providers: FiltersSchema.shape.providers,
+  registerAppTool(
+    server,
+    'poll_spend_data',
+    {
+      title: 'Poll Spend Data',
+      description: 'Returns spend data for UI polling with updated filters',
+      inputSchema: {
+        dateRange: FiltersSchema.shape.dateRange,
+        teamIds: FiltersSchema.shape.teamIds,
+        models: FiltersSchema.shape.models,
+        providers: FiltersSchema.shape.providers,
+      },
+      outputSchema: SpendBreakdownSchema,
+      _meta: { ui: { visibility: ['app'] } },
     },
-    outputSchema: SpendBreakdownSchema,
-    _meta: { ui: { visibility: ['app'] } },
-  }, (params) => {
-    const filters = FiltersSchema.parse(params);
-    const data = getSpendBreakdown(filters);
-    return {
-      content: [{ type: 'text', text: JSON.stringify(data) }],
-      structuredContent: data,
-    };
-  });
+    (params) => {
+      const filters = FiltersSchema.parse(params);
+      const data = getSpendBreakdown(filters);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(data) }],
+        structuredContent: data,
+      };
+    },
+  );
 
   // Register the App UI HTML resource
-  registerAppResource(server, 'Spend Analytics', resourceUri,
+  registerAppResource(
+    server,
+    'Spend Analytics',
+    resourceUri,
     { description: 'Interactive Spend Analytics Dashboard' },
     () => {
       const html = readFileSync(join(DIST_DIR, 'spend/mcp-app.html'), 'utf-8');
       return {
-        contents: [{
-          uri: resourceUri,
-          mimeType: RESOURCE_MIME_TYPE,
-          text: html,
-        }],
+        contents: [
+          {
+            uri: resourceUri,
+            mimeType: RESOURCE_MIME_TYPE,
+            text: html,
+          },
+        ],
       };
     },
   );
@@ -877,18 +931,18 @@ export function registerSpendTools(server: McpServer) {
 
 ### Tool Inventory
 
-| Tool | Type | Description |
-|------|------|-------------|
-| `get_impact_summary` | model-facing | FR-1: Impact Summary KPIs |
-| `poll_impact_data` | app-only | FR-1: UI refresh for Impact |
-| `get_spend_breakdown` | model-facing | FR-2: Spend by team/model/time |
-| `poll_spend_data` | app-only | FR-2: UI refresh for Spend |
-| `get_adoption_metrics` | model-facing | FR-3: Funnel, DAU, capabilities |
-| `poll_adoption_data` | app-only | FR-3: UI refresh for Adoption |
-| `get_quality_metrics` | model-facing | FR-4: Success rate, autonomy, failures |
-| `poll_quality_data` | app-only | FR-4: UI refresh for Quality |
-| `get_governance_summary` | model-facing | FR-5: Policy effectiveness, events |
-| `poll_governance_data` | app-only | FR-5: UI refresh for Governance |
+| Tool                     | Type         | Description                            |
+| ------------------------ | ------------ | -------------------------------------- |
+| `get_impact_summary`     | model-facing | FR-1: Impact Summary KPIs              |
+| `poll_impact_data`       | app-only     | FR-1: UI refresh for Impact            |
+| `get_spend_breakdown`    | model-facing | FR-2: Spend by team/model/time         |
+| `poll_spend_data`        | app-only     | FR-2: UI refresh for Spend             |
+| `get_adoption_metrics`   | model-facing | FR-3: Funnel, DAU, capabilities        |
+| `poll_adoption_data`     | app-only     | FR-3: UI refresh for Adoption          |
+| `get_quality_metrics`    | model-facing | FR-4: Success rate, autonomy, failures |
+| `poll_quality_data`      | app-only     | FR-4: UI refresh for Quality           |
+| `get_governance_summary` | model-facing | FR-5: Policy effectiveness, events     |
+| `poll_governance_data`   | app-only     | FR-5: UI refresh for Governance        |
 
 ### Text Formatting
 
@@ -1050,8 +1104,8 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const appsDir = join(__dirname, 'apps');
 const apps = readdirSync(appsDir, { withFileTypes: true })
-  .filter(d => d.isDirectory())
-  .map(d => d.name);
+  .filter((d) => d.isDirectory())
+  .map((d) => d.name);
 
 for (const app of apps) {
   console.log(`Building MCP App: ${app}`);
@@ -1090,34 +1144,34 @@ All error handling follows one principle: **fail gracefully, show context, offer
 
 Services are synchronous and operate on in-memory mock data, so runtime errors are limited to bad filter inputs:
 
-| Scenario | Behavior |
-|----------|----------|
-| Invalid date range (`from > to`) | Throw `InvalidFilterError` with message. Caller decides how to surface it. |
+| Scenario                             | Behavior                                                                             |
+| ------------------------------------ | ------------------------------------------------------------------------------------ |
+| Invalid date range (`from > to`)     | Throw `InvalidFilterError` with message. Caller decides how to surface it.           |
 | Non-existent team/model ID in filter | Return empty result with correct schema shape (zero totals, empty arrays). No error. |
-| Empty date range (no sessions match) | Return zero totals and empty arrays. Valid response, not an error. |
+| Empty date range (no sessions match) | Return zero totals and empty arrays. Valid response, not an error.                   |
 
 Services never return `undefined` or `null` at the top level — always a fully-shaped response object.
 
 ### Web Dashboard
 
-| Layer | Mechanism |
-|-------|-----------|
-| React tree | Top-level `ErrorBoundary` at the dashboard layout catches unexpected render errors. Shows "Something went wrong" with a reload button. |
-| Data fetching | TanStack Query's `error` state per query. Each page/section shows an inline error callout with retry button — not a full-page error. |
-| Loading | TanStack Query's `isPending` state. Components render skeleton placeholders matching their layout. |
-| Empty results | Components check for empty data and show "No data for this period" message with suggestion to adjust filters. |
-| Filter validation | TanStack Router's Zod search param validation. Invalid URL params fall back to defaults silently (no crash on malformed URLs). |
+| Layer             | Mechanism                                                                                                                              |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| React tree        | Top-level `ErrorBoundary` at the dashboard layout catches unexpected render errors. Shows "Something went wrong" with a reload button. |
+| Data fetching     | TanStack Query's `error` state per query. Each page/section shows an inline error callout with retry button — not a full-page error.   |
+| Loading           | TanStack Query's `isPending` state. Components render skeleton placeholders matching their layout.                                     |
+| Empty results     | Components check for empty data and show "No data for this period" message with suggestion to adjust filters.                          |
+| Filter validation | TanStack Router's Zod search param validation. Invalid URL params fall back to defaults silently (no crash on malformed URLs).         |
 
 Components receive data via props and handle three states: **loading** (skeleton), **error** (callout + retry), **empty** (message). No component renders `undefined` data.
 
 ### MCP Server
 
-| Scenario | Behavior |
-|----------|----------|
-| Invalid tool parameters | Zod validation error → return structured error response with field-level messages. No stack trace. |
-| Missing optional parameters | Default to full date range, all teams, all models. |
-| Service-layer error | Catch and return `{ content: [{ type: 'text', text: 'Error: <message>' }], isError: true }`. |
-| App UI resource not found | Return 404-style error in resource response. |
+| Scenario                    | Behavior                                                                                           |
+| --------------------------- | -------------------------------------------------------------------------------------------------- |
+| Invalid tool parameters     | Zod validation error → return structured error response with field-level messages. No stack trace. |
+| Missing optional parameters | Default to full date range, all teams, all models.                                                 |
+| Service-layer error         | Catch and return `{ content: [{ type: 'text', text: 'Error: <message>' }], isError: true }`.       |
+| App UI resource not found   | Return 404-style error in resource response.                                                       |
 
 MCP tools never throw unhandled exceptions — all errors are caught and returned as structured responses that LLMs can interpret.
 
@@ -1133,30 +1187,35 @@ No login flow. Multi-tenancy awareness only:
 ## 12. Key Design Decisions
 
 ### Why Vite + React instead of Next.js
+
 - No SSR needed — client-side dashboard with in-memory mock data
 - Simpler build, especially in monorepo with MCP server
 - MCP App UIs also use Vite 7 — consistent tooling across the project
 - TanStack Router + Query gives us everything Next.js would (routing, data fetching, caching) without the framework overhead
 
 ### Why monorepo with shared package
+
 - Same Zod schemas, mock generator, and service functions serve both web and MCP
 - Changes to data model propagate to both interfaces automatically
 - Tests on the shared layer cover both consumers
 - No API serialization boundary — services return typed objects directly
 
 ### Why Recharts for both web and MCP App UIs
+
 - Consistent charting API — shared component patterns, shared theming
 - MCP App UIs already use React — Recharts is a natural fit
 - Bundle size (~200KB gzipped) is acceptable for iframe-based App UIs
 - Avoids maintaining two charting codebases with different APIs
 
 ### Why TanStack Router over React Router
+
 - Type-safe search params with Zod validation — perfect for dashboard filters
 - Built-in search param serialization — filters persist in URL automatically
 - Same ecosystem as TanStack Query — consistent patterns
 - React Router v7's advanced features require framework mode (not SPA)
 
 ### Why seeded mock data
+
 - Deterministic: tests don't flake, screenshots match
 - Realistic: patterns model actual usage, not random noise
 - Configurable: change seed for different scenarios

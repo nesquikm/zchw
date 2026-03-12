@@ -12,12 +12,12 @@ This plan breaks the AgentView build into PR-sized milestones, each independentl
 
 The milestones are ordered by dependency and value. If time is tight, use these decision points:
 
-| After milestone | If behind schedule | Action |
-|---|---|---|
-| M5 (services) | Services took longer than expected | Skip M10 (MCP App UIs) — ship MCP server with text-only responses. MCP Apps can be added later without changing the tool API |
-| M8 (Spend page) | Web dashboard behind | Skip chart polish. Bare functional charts > polished subset |
-| M9 (MCP server) | MCP server tools work | Move to M11+M12 (banner + polish). MCP App UIs (M10) are the last thing to cut |
-| M10 (MCP Apps) | App UIs are buggy | Ship Impact App only (simpler). Cut Spend App |
+| After milestone | If behind schedule                 | Action                                                                                                                       |
+| --------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| M5 (services)   | Services took longer than expected | Skip M10 (MCP App UIs) — ship MCP server with text-only responses. MCP Apps can be added later without changing the tool API |
+| M8 (Spend page) | Web dashboard behind               | Skip chart polish. Bare functional charts > polished subset                                                                  |
+| M9 (MCP server) | MCP server tools work              | Move to M11+M12 (banner + polish). MCP App UIs (M10) are the last thing to cut                                               |
+| M10 (MCP Apps)  | App UIs are buggy                  | Ship Impact App only (simpler). Cut Spend App                                                                                |
 
 **The non-negotiable core** (must ship even if everything else slips): M1-M6 (foundation + layout/routing) + M7 (Impact page) + M9 (MCP tools with text). This gives a working dashboard with the hero page + conversational analytics. M6 is required because M7 depends on the layout shell, routing, and filter infrastructure it provides.
 
@@ -28,6 +28,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Monorepo with all configs. Everything builds and lints with zero source code.
 
 **Tasks:**
+
 1. Initialize npm workspace root with `packages/shared`, `packages/web`, `packages/mcp-server`
 2. Configure TypeScript (strict) — base `tsconfig.json` + per-package configs
 3. Configure Vitest (workspace mode) + coverage
@@ -38,6 +39,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 8. Verify: `npm run build && npm run lint && npm run typecheck` all pass (with empty packages)
 
 **Files touched:**
+
 - `package.json`, `tsconfig.json`, `vitest.config.ts`, `vitest.workspace.ts`
 - `packages/shared/package.json`, `packages/shared/tsconfig.json`
 - `packages/web/package.json`, `packages/web/tsconfig.json`, `packages/web/vite.config.ts`, `packages/web/index.html`
@@ -54,6 +56,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** All shared types defined as Zod 4 schemas. The data contract is frozen.
 
 **Tasks:**
+
 1. Create `packages/shared/src/types/organization.ts` — Org, Team, User schemas
 2. Create `packages/shared/src/types/session.ts` — AgentSession, NonAgentPR, autonomy levels, task types, failure modes, session status
 3. Create `packages/shared/src/types/metrics.ts` — TrendSchema, ImpactSummary, SpendBreakdown, AdoptionMetrics, QualityMetrics, GovernanceMetrics response schemas (all sub-schemas: TeamSpend, ModelSpend, etc.)
@@ -63,6 +66,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 7. Create `packages/shared/src/index.ts` — public API barrel
 
 **Tests (write first):**
+
 - Schema smoke tests: each schema parses a valid example, rejects an invalid one
 
 **Definition of done:** All schemas defined, exported, `npm run typecheck` passes.
@@ -74,6 +78,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Seeded deterministic generator producing 90 days of realistic data. Foundation for everything else.
 
 **Tasks:**
+
 1. Create `packages/shared/src/mock/seed.ts` — mulberry32 PRNG
 2. Create `packages/shared/src/mock/organizations.ts` — 1 org, 5 teams
 3. Create `packages/shared/src/mock/users.ts` — 30 users with S-curve activation
@@ -90,6 +95,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 8. Create `packages/shared/src/mock/index.ts` — exports generated dataset (seed 42)
 
 **Tests (write first — `tests/unit/shared/mock/generator.test.ts`):**
+
 - Determinism: same seed → identical output
 - Data integrity: all foreign keys valid, dates in range, no sessions before invite
 - Realistic patterns: weekday > weekend (2x+), S-curve adoption, team variance (3x+), model cost correlation
@@ -107,11 +113,13 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Pure formatting and calculation functions.
 
 **Tasks:**
+
 1. Create `packages/shared/src/utils/format.ts` — formatCurrency, formatPercent, formatDuration, formatNumber, formatTrend
 2. Create `packages/shared/src/utils/calculations.ts` — calculateTrend, projectMonthEnd, calculateCycleTimeDelta
 3. Create `packages/shared/src/utils/index.ts`
 
 **Tests (write first):**
+
 - `tests/unit/shared/utils/format.test.ts` — all formatters with edge cases (0, negative, NaN, large numbers)
 - `tests/unit/shared/utils/calculations.test.ts` — trend calculation, division by zero, projection logic
 
@@ -124,6 +132,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** All 5 analytics services returning typed, correct data.
 
 **Tasks:**
+
 1. Create `packages/shared/src/services/impact.ts` — getImpactSummary
 2. Create `packages/shared/src/services/spend.ts` — getSpendBreakdown
 3. Create `packages/shared/src/services/adoption.ts` — getAdoptionMetrics
@@ -132,6 +141,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 6. Create `packages/shared/src/services/index.ts`
 
 **Tests (write first):**
+
 - `tests/unit/shared/services/impact.test.ts` — cost per outcome formula, all 6 trend fields (nullable), cycle time delta uses non-agent baseline, sparkline adaptive length, verification window exclusion, measurement labels
 - `tests/unit/shared/services/spend.test.ts` — spend by team sums to total, pro-rated budget utilization, projection ≥ spent so far, at least one team approaching/exceeding
 - `tests/unit/shared/services/adoption.test.ts` — funnel monotonically decreasing, time-to-value > 0, DAU ≤ WAU
@@ -150,6 +160,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Dashboard shell with navigation and working filters. No page content yet.
 
 **Tasks:**
+
 1. Create `packages/web/src/main.tsx` — entry point with QueryClientProvider
 2. Create `packages/web/src/router.ts` — TanStack Router config with search param schemas
 3. Create `packages/web/src/routes/__root.tsx` — root layout: sidebar + header + filter bar
@@ -164,6 +175,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 12. Create `packages/web/src/lib/query-client.ts`
 
 **Tests (write first):**
+
 - `tests/unit/web/components/filters/date-range-picker.test.tsx` — presets, custom range, validation
 - Filter URL sync: changing filters updates URL, loading URL pre-fills filters
 
@@ -176,6 +188,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** The hero page with all FR-1 metrics.
 
 **Tasks:**
+
 1. Create `packages/web/src/components/metrics/metric-card.tsx` — KPI card with value, trend, sparkline, measurement badge
 2. Create `packages/web/src/components/metrics/measurement-badge.tsx` — Observed/Estimated indicator
 3. Create `packages/web/src/components/charts/sparkline.tsx`
@@ -185,6 +198,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
    - Measurement badges (observed/estimated)
 
 **Tests (write first):**
+
 - `tests/unit/web/components/metric-card.test.tsx` — renders value/label/trend, up/down arrows, measurement badge, sparkline
 - `tests/unit/web/components/measurement-badge.test.tsx` — observed/estimated styling + tooltip
 - `tests/unit/web/components/sparkline.test.tsx` — SVG points, empty data, single point
@@ -199,6 +213,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** All FR-2 charts and metrics.
 
 **Tasks:**
+
 1. Create `packages/web/src/components/charts/spend-over-time.tsx` — area chart with projection line
 2. Create `packages/web/src/components/charts/budget-utilization.tsx` — horizontal bar with threshold alerts
 3. Create `packages/web/src/components/charts/cost-drivers.tsx` — sorted bar chart
@@ -206,6 +221,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 5. Create `packages/web/src/routes/dashboard/spend.tsx` — Spend page composing all charts
 
 **Tests (write first):**
+
 - Chart components receive data via props and render without errors
 - Spend page integration: renders all charts with real service data
 
@@ -218,6 +234,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** All 5 MCP tools registered, returning text summaries + structured data.
 
 **Tasks:**
+
 1. Create `packages/mcp-server/server.ts` — McpServer setup (transport-agnostic, uses `@modelcontextprotocol/sdk` + `@modelcontextprotocol/ext-apps`)
 2. Create `packages/mcp-server/main.ts` — dual transport entry: stdio (default) for local clients, `--http` flag for remote HTTP access on port 3001
 3. Create `packages/mcp-server/formatters/text.ts` — text summary formatters for each tool
@@ -228,6 +245,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 8. Create `packages/mcp-server/tools/governance.ts` — get_governance_summary + poll_governance_data
 
 **Tests (write first):**
+
 - `tests/integration/mcp-tools.test.ts`:
   - All 10 tools registered (5 model-facing + 5 app-only)
   - Each model-facing tool returns text content + structuredContent
@@ -245,6 +263,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Interactive App UIs for Claude Desktop / MCP App-capable clients.
 
 **Tasks:**
+
 1. Set up Vite 7 build for single-file HTML (`packages/mcp-server/vite.config.ts` + `build-apps.ts`, using `vite-plugin-singlefile`)
 2. Create `packages/mcp-server/apps/impact/` — Impact App UI:
    - Uses `@modelcontextprotocol/ext-apps/react` (`useApp`, `useHostStyles`)
@@ -259,6 +278,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 4. Register App resources in server.ts
 
 **Tests:**
+
 - Build produces valid single-file HTML for each app
 - Manual verification: connect to Claude Desktop, invoke tool, interact with App UI
 
@@ -271,11 +291,13 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Dismissible MCP promotion banner on all dashboard pages.
 
 **Tasks:**
+
 1. Create `packages/web/src/components/layout/ai-callout.tsx`
 2. Add to dashboard layout (shows on all pages)
 3. Dismiss state persisted in localStorage
 
 **Tests:**
+
 - Banner renders with correct copy
 - Clicking dismiss hides banner
 - Banner stays hidden after page reload (localStorage)
@@ -289,6 +311,7 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 **Objective:** Everything clean, consistent, and passing.
 
 **Tasks:**
+
 1. Fix any remaining lint/typecheck errors
 2. Fix any failing tests
 3. Ensure `npm run build` produces working artifacts
@@ -305,25 +328,30 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 ## Stretch Milestones
 
 ### S1: Adoption & Enablement Page (FR-3)
+
 - Create web page + charts (funnel, DAU/WAU, capability heatmap, "where AI is failing")
 - Create MCP App UI
 - Tests for page + app
 
 ### S2: Quality & Autonomy Page (FR-4)
+
 - Create web page + charts (autonomy distribution, failure modes, p50/p95, revert rate)
 - Create MCP App UI
 - Tests for page + app
 
 ### S3: Governance & Compliance Page (FR-5)
+
 - Simplified: event log table + policy block counts + severity distribution
 - Create MCP App UI
 - Tests for page + app
 
 ### S4: E2E Tests (Playwright)
+
 - Dashboard navigation, filter persistence, data verification
 - Tests from testing-spec.md Section 7
 
 ### S5: Dark Mode
+
 - Tailwind dark mode toggle
 - Chart palette adaptation
 

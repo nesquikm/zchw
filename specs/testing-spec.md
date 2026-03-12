@@ -11,13 +11,13 @@
 
 ## 2. Testing Stack
 
-| Tool | Purpose |
-|------|---------|
-| Vitest | Test runner, assertions, mocking, coverage |
-| React Testing Library | Component rendering, user interaction simulation |
-| @testing-library/user-event | Realistic user interactions (clicks, typing) |
-| Playwright | E2E browser tests (stretch goal) |
-| MSW (Mock Service Worker) | Not needed — services are in-memory, no HTTP to mock |
+| Tool                        | Purpose                                              |
+| --------------------------- | ---------------------------------------------------- |
+| Vitest                      | Test runner, assertions, mocking, coverage           |
+| React Testing Library       | Component rendering, user interaction simulation     |
+| @testing-library/user-event | Realistic user interactions (clicks, typing)         |
+| Playwright                  | E2E browser tests (stretch goal)                     |
+| MSW (Mock Service Worker)   | Not needed — services are in-memory, no HTTP to mock |
 
 ### Test Environment Controls
 
@@ -66,10 +66,12 @@ tests/
 The mock data is the foundation. If it's unrealistic or inconsistent, the entire dashboard is meaningless.
 
 **Determinism:**
+
 - Same seed produces identical output across runs
 - Different seeds produce different but valid data
 
 **Data integrity:**
+
 - Every session references a valid userId and teamId
 - Every user belongs to an existing team
 - Session dates fall within the 90-day range
@@ -78,6 +80,7 @@ The mock data is the foundation. If it's unrealistic or inconsistent, the entire
 - `firstOutcomeAt` ≤ first session where `prMerged && ciPassed && !revertedWithin48h`
 
 **Realistic patterns:**
+
 - Weekday sessions outnumber weekend sessions by at least 2x
 - Adoption follows an S-curve: fewer active users in early days, more later
 - Team variance: at least one team has 3x more sessions per user than the lowest team
@@ -85,6 +88,7 @@ The mock data is the foundation. If it's unrealistic or inconsistent, the entire
 - Autonomy progression: Level 3 sessions are rare in the first 30 days, more common in the last 30
 
 **Volume:**
+
 - Total sessions ≈ 15,000 (±20%)
 - Non-agent PRs ≈ 3,000 (±20%)
 - All 5 teams have at least some sessions
@@ -92,17 +96,20 @@ The mock data is the foundation. If it's unrealistic or inconsistent, the entire
 - Security events ≥ 200 (enough for meaningful severity/time distributions)
 
 **Baseline data (non-agent PRs):**
+
 - Non-agent PRs exist for all 5 teams
 - Non-agent `timeToMergeMinutes` is on average slower than agent-assisted (by 20-30%)
 - Non-agent `linesAdded` sum is a meaningful fraction of total code (agent + non-agent)
 
 **Edge cases:**
+
 - At least one user is invited but never activated (null `activatedAt`)
 - At least one session is `abandoned`
 - At least one verified outcome was reverted within 48h
 - At least one team is over budget
 
 **Multi-seed invariants (run for seeds [42, 123, 999, 7777, 31415]):**
+
 - No negative durations, costs, or token counts
 - `endedAt` ≥ `startedAt` for all completed sessions
 - All timestamps fall within the 90-day window
@@ -113,9 +120,10 @@ The mock data is the foundation. If it's unrealistic or inconsistent, the entire
 
 ### 4.2 Services
 
-Each service is tested with the same pattern. **Important boundary:** service tests assert that the *service logic* is correct (aggregation, filtering, formulas), not that the mock data has certain patterns. Pattern tests (e.g., "autonomy progression," "model cost correlation") belong in `generator.test.ts`. Service tests should pass regardless of which realistic patterns the generator models.
+Each service is tested with the same pattern. **Important boundary:** service tests assert that the _service logic_ is correct (aggregation, filtering, formulas), not that the mock data has certain patterns. Pattern tests (e.g., "autonomy progression," "model cost correlation") belong in `generator.test.ts`. Service tests should pass regardless of which realistic patterns the generator models.
 
 **Input/output contract:**
+
 - Returns correct schema (Zod parse succeeds on output)
 - Responds to filter changes (different date range → different numbers)
 - Empty filters return full-range data
@@ -123,6 +131,7 @@ Each service is tested with the same pattern. **Important boundary:** service te
 **Correctness (service logic, not data patterns):**
 
 `impact.test.ts` (validates FR-1, AC-1.1–AC-1.5):
+
 - Cost per verified outcome = total AI spend across ALL sessions in the period / count of verified outcomes (fully-loaded: includes failed, abandoned, in-progress session costs)
 - Value-to-cost ratio inputs are transparent (hourlyRate, estimatedHoursSaved, totalSpend all present and > 0)
 - Cycle time delta uses non-agent PRs as baseline: `(agentMedian - baselineMedian) / baselineMedian`
@@ -135,6 +144,7 @@ Each service is tested with the same pattern. **Important boundary:** service te
 - Trend values compare against previous period of equal length; `null` when no previous data
 
 `spend.test.ts` (validates FR-2, AC-2.1–AC-2.5):
+
 - Total spend equals sum of all session costs in the filtered range
 - Spend by team sums to total spend (within floating-point tolerance)
 - Spend by model sums to total spend
@@ -143,6 +153,7 @@ Each service is tested with the same pattern. **Important boundary:** service te
 - At least one team flagged as approaching/exceeding budget (tests against pro-rated threshold)
 
 `adoption.test.ts` (validates FR-3, AC-3.1–AC-3.4):
+
 - Funnel is monotonically decreasing: invited ≥ activated ≥ first outcome ≥ regular
 - Time-to-value > 0 for users who have outcomes
 - DAU ≤ WAU for any given week
@@ -150,6 +161,7 @@ Each service is tested with the same pattern. **Important boundary:** service te
 - "Where AI is failing" surfaces teams with below-average success rate
 
 `quality.test.ts` (validates FR-4, AC-4.1–AC-4.5):
+
 - Verified success rate is between 0 and 1 (denominator = completed + failed sessions only, excludes abandoned and active)
 - Verified success rate excludes sessions in 48h verification window from both numerator and denominator
 - Autonomy distribution percentages sum to 100%
@@ -159,12 +171,14 @@ Each service is tested with the same pattern. **Important boundary:** service te
 - p95 completion time ≥ p50
 
 `governance.test.ts` (validates FR-5, AC-5.1–AC-5.3):
+
 - Block rate + override rate ≤ total policy events
 - Sensitive data blocked + allowed = total sensitive data events
 - Event log entries are sorted by timestamp descending
 - Severity distribution covers all severity levels present in data
 
 **Filter behavior:**
+
 - Filtering by a single team returns only that team's data
 - Filtering by date range excludes sessions outside the range
 - Filtering by model only includes sessions using that model
@@ -172,12 +186,14 @@ Each service is tested with the same pattern. **Important boundary:** service te
 - Empty result is handled (e.g., filter for a team that doesn't use a specific model)
 
 **Empty and edge-case data handling:**
+
 - Date range with no sessions returns zero totals and empty arrays (no crash)
 - Single-day date range returns valid data
 - Filter for a non-existent team ID returns empty result with correct shape
 - Date range `from > to` throws `InvalidFilterError` (per tech spec §10 Error Handling)
 
 **Multi-seed service invariants (run for seeds [42, 123, 999, 7777, 31415]):**
+
 - All totals are non-negative
 - Funnel is monotonically decreasing for any seed
 - p95 ≥ p50 for any seed
@@ -187,6 +203,7 @@ Each service is tested with the same pattern. **Important boundary:** service te
 ### 4.3 Utilities
 
 `format.test.ts`:
+
 - `formatCurrency(1234.5)` → `"$1,234.50"`
 - `formatCurrency(1234567)` → `"$1.23M"` (abbreviation for large numbers)
 - `formatPercent(0.885)` → `"88.5%"`
@@ -199,6 +216,7 @@ Each service is tested with the same pattern. **Important boundary:** service te
 - Edge cases: very large numbers, NaN → graceful handling
 
 `calculations.test.ts`:
+
 - `calculateTrend(current, previous)` → correct percentage change
 - `calculateTrend(100, 0)` → handles division by zero
 - `projectMonthEnd(dailySpend, today)` → returns number ≥ sum of dailySpend
@@ -298,30 +316,35 @@ Tests MCP tool registration and invocation:
 Using Playwright against the built web dashboard:
 
 **Test 1: Impact Summary loads with data**
+
 1. Navigate to `/dashboard`
 2. Verify 6 metric cards are visible
 3. Verify at least one shows "Observed" badge
 4. Verify sparklines are rendered (SVG elements exist)
 
 **Test 2: Navigate between pages**
+
 1. Start at `/dashboard`
 2. Click "Spend" in sidebar
 3. Verify URL changed to `/dashboard/spend`
 4. Verify spend charts are visible
 
 **Test 3: Filters update data**
+
 1. Navigate to `/dashboard/spend`
 2. Change date range from 30d to 7d
 3. Verify URL contains `range=7d`
 4. Verify total spend number decreased (7 days < 30 days)
 
 **Test 4: Filters persist in URL**
+
 1. Navigate to `/dashboard/spend?range=90d&teams=platform`
 2. Verify date range picker shows 90d selected
 3. Verify team filter shows "Platform" selected
 4. Verify charts show Platform-only data
 
 **Test 5: AI Integration Callout**
+
 1. Navigate to `/dashboard`
 2. Verify MCP callout banner is visible
 3. Click dismiss
@@ -331,14 +354,14 @@ Using Playwright against the built web dashboard:
 
 Targets are aspirational — quality of assertions matters more than hitting a number. High coverage with shallow assertions is worse than moderate coverage with meaningful invariants.
 
-| Layer | Target | Minimum | Rationale |
-|-------|--------|---------|-----------|
-| Shared services | ≥90% | 80% | Core logic, shared by both interfaces. Highest priority |
-| Shared utils | ≥95% | 90% | Pure functions, easy to test exhaustively |
-| Mock generator | ≥80% | 70% | Invariants and constraints, not every random branch |
-| Web components | ≥60% | 50% | Key components + one page integration test. Don't chase UI coverage |
-| MCP tools | ≥80% | 70% | Table-driven contract tests across all tools |
-| Overall | ≥75% | 65% | Meaningful coverage, not vanity metrics |
+| Layer           | Target | Minimum | Rationale                                                           |
+| --------------- | ------ | ------- | ------------------------------------------------------------------- |
+| Shared services | ≥90%   | 80%     | Core logic, shared by both interfaces. Highest priority             |
+| Shared utils    | ≥95%   | 90%     | Pure functions, easy to test exhaustively                           |
+| Mock generator  | ≥80%   | 70%     | Invariants and constraints, not every random branch                 |
+| Web components  | ≥60%   | 50%     | Key components + one page integration test. Don't chase UI coverage |
+| MCP tools       | ≥80%   | 70%     | Table-driven contract tests across all tools                        |
+| Overall         | ≥75%   | 65%     | Meaningful coverage, not vanity metrics                             |
 
 Coverage is measured with Vitest's built-in c8/istanbul coverage provider.
 
