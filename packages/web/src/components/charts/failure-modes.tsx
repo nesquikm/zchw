@@ -1,3 +1,5 @@
+import { InfoTooltip } from '../ui/info-tooltip';
+
 export interface FailureModesProps {
   modes: {
     mode: string;
@@ -13,7 +15,10 @@ function formatModeLabel(mode: string): string {
 export function FailureModes({ modes }: FailureModesProps) {
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-zinc-700">Failure Modes</h3>
+      <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold text-zinc-700">
+        Failure Modes
+        <InfoTooltip glossaryKey="failureModes" />
+      </h3>
       {modes.length === 0 ? (
         <p className="text-xs text-zinc-400">No failures in this period</p>
       ) : (

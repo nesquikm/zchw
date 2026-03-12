@@ -3,6 +3,8 @@ import { useGovernanceMetrics } from '../../hooks/use-analytics';
 import { formatPercent, formatTrend } from '@agentview/shared';
 import type { GovernanceMetrics } from '@agentview/shared';
 import { MetricCard } from '../../components/metrics/metric-card';
+import type { GlossaryKey } from '../../lib/glossary';
+import { InfoTooltip } from '../../components/ui/info-tooltip';
 import { SeverityOverTime } from '../../components/charts/severity-over-time';
 import { EventLogTable } from '../../components/charts/event-log-table';
 import { AccessScopeTable } from '../../components/charts/access-scope-table';
@@ -36,13 +38,17 @@ export function GovernancePage() {
             trend={card.trend}
             sparklineData={card.sparklineData}
             measurement={card.measurement}
+            glossaryKey={card.glossaryKey}
           />
         ))}
       </div>
 
       {/* Sensitive Data Stats */}
       <div className="mb-4 rounded-lg border border-zinc-200 bg-white p-4">
-        <h3 className="mb-3 text-sm font-semibold text-zinc-700">Sensitive Data</h3>
+        <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold text-zinc-700">
+          Sensitive Data
+          <InfoTooltip glossaryKey="sensitiveData" />
+        </h3>
         <div className="flex gap-6 text-sm">
           <div>
             <span className="text-zinc-500">Blocked: </span>
@@ -91,6 +97,7 @@ function buildCards(data: GovernanceMetrics) {
   return [
     {
       label: 'Policy Block Rate',
+      glossaryKey: 'policyBlockRate' as GlossaryKey,
       value: formatPercent(data.policyBlockRate),
       trend: formatTrend(null),
       sparklineData: [] as (number | null)[],
@@ -98,6 +105,7 @@ function buildCards(data: GovernanceMetrics) {
     },
     {
       label: 'Override Rate',
+      glossaryKey: 'overrideRate' as GlossaryKey,
       value: formatPercent(data.policyOverrideRate),
       trend: formatTrend(null),
       sparklineData: [] as (number | null)[],

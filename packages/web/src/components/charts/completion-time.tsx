@@ -1,3 +1,5 @@
+import { InfoTooltip } from '../ui/info-tooltip';
+
 export interface CompletionTimeProps {
   p50Minutes: number;
   p95Minutes: number;
@@ -6,7 +8,10 @@ export interface CompletionTimeProps {
 export function CompletionTime({ p50Minutes, p95Minutes }: CompletionTimeProps) {
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-zinc-700">Completion Time</h3>
+      <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold text-zinc-700">
+        Completion Time
+        <InfoTooltip glossaryKey="completionTime" />
+      </h3>
       <div className="flex gap-8">
         <div>
           <p className="text-xs font-medium text-zinc-500">p50 (median)</p>

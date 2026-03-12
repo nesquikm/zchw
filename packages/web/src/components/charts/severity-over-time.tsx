@@ -1,3 +1,5 @@
+import { InfoTooltip } from '../ui/info-tooltip';
+
 export interface SeverityOverTimeProps {
   data: {
     date: string;
@@ -18,7 +20,10 @@ const SEVERITY_COLORS: Record<string, string> = {
 export function SeverityOverTime({ data }: SeverityOverTimeProps) {
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-zinc-700">Severity Over Time</h3>
+      <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold text-zinc-700">
+        Severity Over Time
+        <InfoTooltip text="Security event severity distribution over the selected period." />
+      </h3>
       {data.length === 0 ? (
         <p className="text-xs text-zinc-400">No data available</p>
       ) : (

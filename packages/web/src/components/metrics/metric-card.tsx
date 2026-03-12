@@ -1,6 +1,8 @@
 import type { TrendResult } from '@agentview/shared';
+import type { GlossaryKey } from '../../lib/glossary';
 import { MeasurementBadge } from './measurement-badge';
 import { Sparkline } from '../charts/sparkline';
+import { InfoTooltip } from '../ui/info-tooltip';
 
 export interface MetricCardProps {
   label: string;
@@ -9,6 +11,7 @@ export interface MetricCardProps {
   sparklineData: (number | null)[];
   measurement: 'observed' | 'estimated';
   subtitle?: string;
+  glossaryKey?: GlossaryKey;
 }
 
 export function MetricCard({
@@ -18,12 +21,16 @@ export function MetricCard({
   sparklineData,
   measurement,
   subtitle,
+  glossaryKey,
 }: MetricCardProps) {
   return (
     <div data-testid="metric-card" className="rounded-lg border border-zinc-200 bg-white p-4">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-zinc-500">{label}</p>
+          <p className="flex items-center gap-1 text-sm font-medium text-zinc-500">
+            {label}
+            {glossaryKey && <InfoTooltip glossaryKey={glossaryKey} />}
+          </p>
           <p data-testid="metric-value" className="text-2xl font-semibold text-zinc-900">
             {value}
           </p>

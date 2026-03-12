@@ -1,3 +1,5 @@
+import { InfoTooltip } from '../ui/info-tooltip';
+
 export interface AccessScopeTableProps {
   scope: {
     repository: string;
@@ -9,7 +11,10 @@ export interface AccessScopeTableProps {
 export function AccessScopeTable({ scope }: AccessScopeTableProps) {
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-zinc-700">Access Scope</h3>
+      <h3 className="mb-3 flex items-center gap-1 text-sm font-semibold text-zinc-700">
+        Access Scope
+        <InfoTooltip glossaryKey="accessScope" />
+      </h3>
       {scope.length === 0 ? (
         <p className="text-xs text-zinc-400">No data available</p>
       ) : (

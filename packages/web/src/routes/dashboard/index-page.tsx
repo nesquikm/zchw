@@ -2,6 +2,7 @@ import { useFilters } from '../../hooks/use-filters';
 import { useImpactSummary } from '../../hooks/use-analytics';
 import { formatCurrency, formatTrend } from '@agentview/shared';
 import { MetricCard } from '../../components/metrics/metric-card';
+import type { GlossaryKey } from '../../lib/glossary';
 import type { ImpactSummary } from '@agentview/shared';
 
 export function DashboardIndexPage() {
@@ -33,6 +34,7 @@ export function DashboardIndexPage() {
             sparklineData={card.sparklineData}
             measurement={card.measurement}
             subtitle={card.subtitle}
+            glossaryKey={card.glossaryKey}
           />
         ))}
       </div>
@@ -44,6 +46,7 @@ function buildCards(data: ImpactSummary) {
   return [
     {
       label: 'Cost per Verified Outcome',
+      glossaryKey: 'costPerVerifiedOutcome' as GlossaryKey,
       value: formatCurrency(data.costPerVerifiedOutcome),
       trend: formatTrend(data.costPerVerifiedOutcomeTrend),
       sparklineData: data.sparklines.costPerOutcome,
@@ -51,6 +54,7 @@ function buildCards(data: ImpactSummary) {
     },
     {
       label: 'Value-to-Cost Ratio',
+      glossaryKey: 'valueToCostRatio' as GlossaryKey,
       value: `${data.valueToCostRatio.toFixed(1)}x`,
       trend: formatTrend(data.valueToCostRatioTrend),
       sparklineData: data.sparklines.valueToCost,
@@ -59,6 +63,7 @@ function buildCards(data: ImpactSummary) {
     },
     {
       label: 'Cycle Time Delta',
+      glossaryKey: 'cycleTimeDelta' as GlossaryKey,
       value: `${data.cycleTimeDeltaPercent >= 0 ? '+' : ''}${data.cycleTimeDeltaPercent.toFixed(1)}%`,
       trend: formatTrend(data.cycleTimeDeltaTrend),
       sparklineData: data.sparklines.cycleTimeDelta,
@@ -66,6 +71,7 @@ function buildCards(data: ImpactSummary) {
     },
     {
       label: 'Agent Contribution',
+      glossaryKey: 'agentContribution' as GlossaryKey,
       value: `${data.agentContributionPercent.toFixed(1)}%`,
       trend: formatTrend(data.agentContributionTrend),
       sparklineData: data.sparklines.agentContribution,
@@ -73,6 +79,7 @@ function buildCards(data: ImpactSummary) {
     },
     {
       label: 'Active Users',
+      glossaryKey: 'activeUsers' as GlossaryKey,
       value: `${data.activeUsers} / ${data.totalSeats}`,
       trend: formatTrend(data.adoptionTrend),
       sparklineData: data.sparklines.activeUsers,
@@ -80,6 +87,7 @@ function buildCards(data: ImpactSummary) {
     },
     {
       label: 'Verified Outcomes',
+      glossaryKey: 'verifiedOutcome' as GlossaryKey,
       value: `${data.verifiedOutcomes}`,
       trend: formatTrend(data.verifiedOutcomesTrend),
       sparklineData: data.sparklines.verifiedOutcomes,

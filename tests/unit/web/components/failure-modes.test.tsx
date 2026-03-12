@@ -40,7 +40,8 @@ describe('FailureModes', () => {
 
   it('displays human-readable mode labels', () => {
     render(<FailureModes modes={sampleModes} />);
-    expect(screen.getByText(/Agent Error/i)).toBeInTheDocument();
-    expect(screen.getByText(/Test Failure/i)).toBeInTheDocument();
+    const bars = screen.getAllByTestId('failure-mode-bar');
+    expect(bars[0]).toHaveTextContent(/Agent Error/i);
+    expect(bars[1]).toHaveTextContent(/Test Failure/i);
   });
 });

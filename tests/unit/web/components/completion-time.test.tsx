@@ -31,7 +31,7 @@ describe('CompletionTime', () => {
 
   it('renders labels for p50 and p95', () => {
     render(<CompletionTime p50Minutes={12.5} p95Minutes={45.3} />);
-    expect(screen.getByText(/p50/i)).toBeInTheDocument();
-    expect(screen.getByText(/p95/i)).toBeInTheDocument();
+    expect(screen.getByText('p50 (median)')).toBeInTheDocument();
+    expect(screen.getByText('p95')).toBeInTheDocument();
   });
 });

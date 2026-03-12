@@ -14,10 +14,12 @@ const sampleFunnel = {
 describe('AdoptionFunnel', () => {
   it('renders 4 funnel stages', () => {
     render(<AdoptionFunnel funnel={sampleFunnel} />);
-    expect(screen.getByText(/Invited/i)).toBeInTheDocument();
-    expect(screen.getByText(/Activated/i)).toBeInTheDocument();
-    expect(screen.getByText(/First Outcome/i)).toBeInTheDocument();
-    expect(screen.getByText(/Regular/i)).toBeInTheDocument();
+    const stages = screen.getAllByTestId('funnel-stage');
+    expect(stages).toHaveLength(4);
+    expect(stages[0]).toHaveTextContent(/Invited/i);
+    expect(stages[1]).toHaveTextContent(/Activated/i);
+    expect(stages[2]).toHaveTextContent(/First Outcome/i);
+    expect(stages[3]).toHaveTextContent(/Regular/i);
   });
 
   it('displays counts for each stage', () => {

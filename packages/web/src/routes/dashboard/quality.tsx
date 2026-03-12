@@ -2,6 +2,7 @@ import { useFilters } from '../../hooks/use-filters';
 import { useQualityMetrics } from '../../hooks/use-analytics';
 import { formatPercent, formatTrend } from '@agentview/shared';
 import { MetricCard } from '../../components/metrics/metric-card';
+import type { GlossaryKey } from '../../lib/glossary';
 import { AutonomyDistribution } from '../../components/charts/autonomy-distribution';
 import { FailureModes } from '../../components/charts/failure-modes';
 import { CompletionTime } from '../../components/charts/completion-time';
@@ -36,6 +37,7 @@ export function QualityPage() {
             trend={card.trend}
             sparklineData={card.sparklineData}
             measurement={card.measurement}
+            glossaryKey={card.glossaryKey}
           />
         ))}
       </div>
@@ -57,6 +59,7 @@ function buildCards(data: QualityMetrics) {
   return [
     {
       label: 'Verified Success Rate',
+      glossaryKey: 'verifiedSuccessRate' as GlossaryKey,
       value: formatPercent(data.verifiedSuccessRate),
       trend: formatTrend(data.verifiedSuccessRateTrend),
       sparklineData: [] as (number | null)[],
@@ -64,6 +67,7 @@ function buildCards(data: QualityMetrics) {
     },
     {
       label: 'Intervention Rate',
+      glossaryKey: 'interventionRate' as GlossaryKey,
       value: data.interventionRate.toFixed(2),
       trend: formatTrend(data.interventionRateTrend),
       sparklineData: [] as (number | null)[],
@@ -71,6 +75,7 @@ function buildCards(data: QualityMetrics) {
     },
     {
       label: 'Revert Rate',
+      glossaryKey: 'revertRate' as GlossaryKey,
       value: formatPercent(data.revertRate),
       trend: formatTrend(data.revertRateTrend),
       sparklineData: [] as (number | null)[],

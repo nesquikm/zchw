@@ -82,10 +82,8 @@ describe('DashboardIndexPage (Impact Summary)', () => {
 
     await screen.findByText('Value-to-Cost Ratio');
 
-    // Should show hourly rate, hours saved, and total spend
-    expect(screen.getByText(/\$75\/hr/)).toBeInTheDocument();
-    expect(screen.getByText(/saved/i)).toBeInTheDocument();
-    expect(screen.getByText(/spend/i)).toBeInTheDocument();
+    // Should show hourly rate, hours saved, and total spend in subtitle
+    expect(screen.getByText(/\$75\/hr.*saved.*spend/i)).toBeInTheDocument();
   });
 
   it('displays formatted metric values (non-empty)', async () => {

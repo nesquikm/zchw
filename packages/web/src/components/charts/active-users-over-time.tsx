@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
+import { InfoTooltip } from '../ui/info-tooltip';
 
 export interface ActiveUsersOverTimeProps {
   data: { date: string; dau: number; wau: number }[];
@@ -16,7 +17,13 @@ export interface ActiveUsersOverTimeProps {
 export function ActiveUsersOverTime({ data }: ActiveUsersOverTimeProps) {
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="mb-3 text-sm font-semibold text-zinc-700">Active Users Over Time</h3>
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-zinc-700">
+        Active Users Over Time
+        <span className="flex items-center gap-1 text-xs font-normal text-zinc-400">
+          DAU <InfoTooltip glossaryKey="dau" />
+          / WAU <InfoTooltip glossaryKey="wau" />
+        </span>
+      </h3>
       {data.length === 0 ? (
         <p className="text-xs text-zinc-400">No data available</p>
       ) : (

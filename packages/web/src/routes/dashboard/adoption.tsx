@@ -1,5 +1,6 @@
 import { useFilters } from '../../hooks/use-filters';
 import { useAdoptionMetrics } from '../../hooks/use-analytics';
+import { InfoTooltip } from '../../components/ui/info-tooltip';
 import { AdoptionFunnel } from '../../components/charts/adoption-funnel';
 import { ActiveUsersOverTime } from '../../components/charts/active-users-over-time';
 import { CapabilityAdoption } from '../../components/charts/capability-adoption';
@@ -26,7 +27,10 @@ export function AdoptionPage() {
       <div className="mb-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <AdoptionFunnel funnel={data.funnel} />
         <div className="rounded-lg border border-zinc-200 bg-white p-4">
-          <h3 className="mb-1 text-sm font-semibold text-zinc-700">Time to Value</h3>
+          <h3 className="mb-1 flex items-center gap-1 text-sm font-semibold text-zinc-700">
+            Time to Value
+            <InfoTooltip glossaryKey="timeToValue" />
+          </h3>
           <div data-testid="time-to-value" className="text-2xl font-bold text-zinc-900">
             {data.timeToValueMedianDays !== null
               ? `${data.timeToValueMedianDays.toFixed(1)} days`

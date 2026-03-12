@@ -1,3 +1,5 @@
+import { InfoTooltip } from '../ui/info-tooltip';
+
 export interface TeamUsageTableProps {
   teams: {
     teamId: string;
@@ -38,8 +40,9 @@ export function TeamUsageTable({ teams }: TeamUsageTableProps) {
                   <td className="py-2 pr-4 font-medium">
                     {team.teamName}
                     {team.isFailingHighlight && (
-                      <span className="ml-1 text-[10px] font-semibold text-red-500">
+                      <span className="ml-1 inline-flex items-center gap-0.5 text-[10px] font-semibold text-red-500">
                         ● Below avg
+                        <InfoTooltip glossaryKey="belowAvg" />
                       </span>
                     )}
                   </td>
