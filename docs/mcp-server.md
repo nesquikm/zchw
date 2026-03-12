@@ -14,9 +14,35 @@ Starts the server on [http://localhost:3001/mcp](http://localhost:3001/mcp) with
 npm run stop:mcp
 ```
 
+## Transports
+
+The server supports two transports:
+
+- **stdio** — preferred for Claude Desktop and other MCP clients that launch the server as a subprocess. No network setup required.
+- **HTTP** — useful for development and Claude Code (which supports plain HTTP). Runs on `http://localhost:3001/mcp`.
+
+Claude Desktop does not allow connecting to plain HTTP (non-HTTPS) servers, so **stdio is the recommended transport** for it.
+
+## Configure in Claude Desktop
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "agentview": {
+      "command": "npx",
+      "args": ["tsx", "/absolute/path/to/packages/mcp-server/src/main.ts"]
+    }
+  }
+}
+```
+
+Claude Desktop will launch the server as a subprocess using stdio — no need to start it manually.
+
 ## Configure in Claude Code
 
-The project includes `.mcp.json` which auto-configures the server:
+The project includes `.mcp.json` which auto-configures the HTTP server:
 
 ```json
 {
@@ -29,7 +55,7 @@ The project includes `.mcp.json` which auto-configures the server:
 }
 ```
 
-After starting the server, run `/mcp` in Claude Code to connect (or restart the session).
+Start the server with `npm run dev:mcp`, then run `/mcp` in Claude Code to connect (or restart the session).
 
 ## Tools
 
