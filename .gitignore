@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test & coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vite
+vite.config.ts.timestamp-*
+
+# Claude Code local state
+.claude/*.local.*

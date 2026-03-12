@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); FILE=$(echo \"$INPUT\" | grep -o '\"file_path\"[[:space:]]*:[[:space:]]*\"[^\"]*\"' | head -1 | sed 's/.*\"\\([^\"]*\\)\"$/\\1/'); if echo \"$FILE\" | grep -q '/specs/'; then echo 'BLOCK: Spec files in specs/ are read-only. Specs are the source of truth.' >&2; exit 2; fi; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f /Users/ns/workspace/zencoder-homework/package.json ]; then echo '[Reminder] Run /gate-check to verify: npm run typecheck && npm run lint && npm run test'; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
