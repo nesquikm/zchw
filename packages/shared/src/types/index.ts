@@ -38,6 +38,8 @@ export {
   type McpFilters,
 } from './filters.js';
 
+export { MetadataSchema, type Metadata } from './metadata.js';
+
 export {
   TrendSchema,
   ImpactSummarySchema,

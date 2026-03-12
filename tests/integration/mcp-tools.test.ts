@@ -10,6 +10,7 @@ import {
   AdoptionMetricsSchema,
   QualityMetricsSchema,
   GovernanceMetricsSchema,
+  MetadataSchema,
 } from '@agentview/shared';
 
 vi.useFakeTimers({ now: new Date('2026-03-01T00:00:00Z') });
@@ -20,6 +21,7 @@ const MODEL_FACING_TOOLS = [
   'get_adoption_metrics',
   'get_quality_metrics',
   'get_governance_summary',
+  'get_metadata',
 ] as const;
 
 const APP_ONLY_TOOLS = [
@@ -53,7 +55,7 @@ afterAll(async () => {
 });
 
 describe('MCP Tools — Registration', () => {
-  it('registers all 10 tools (5 model-facing + 5 app-only)', async () => {
+  it('registers all 11 tools (6 model-facing + 5 app-only)', async () => {
     const result = await client.listTools();
     const toolNames = result.tools.map((t) => t.name);
 
@@ -63,7 +65,7 @@ describe('MCP Tools — Registration', () => {
     for (const name of APP_ONLY_TOOLS) {
       expect(toolNames).toContain(name);
     }
-    expect(result.tools.length).toBe(10);
+    expect(result.tools.length).toBe(11);
   });
 
   it('model-facing tools have descriptions', async () => {
@@ -98,6 +100,7 @@ describe('MCP Tools — Model-facing tools return text + structuredContent', () 
     get_adoption_metrics: AdoptionMetricsSchema,
     get_quality_metrics: QualityMetricsSchema,
     get_governance_summary: GovernanceMetricsSchema,
+    get_metadata: MetadataSchema,
   } as const;
 
   for (const toolName of MODEL_FACING_TOOLS) {
@@ -256,6 +259,40 @@ describe('MCP Tools — App-only (poll) tools', () => {
       expect(parsed).toBeDefined();
     });
   }
+});
+
+describe('MCP Tools — get_metadata discovery tool', () => {
+  it('get_metadata tool is registered', async () => {
+    const result = await client.listTools();
+    const tool = result.tools.find((t) => t.name === 'get_metadata');
+    expect(tool).toBeDefined();
+    expect(tool?.description).toBeTruthy();
+  });
+
+  it('returns text content and structuredContent', async () => {
+    const result = await client.callTool({ name: 'get_metadata', arguments: {} });
+
+    // Text content
+    const textContent = (result.content as Array<{ type: string; text: string }>).find(
+      (c) => c.type === 'text',
+    );
+    expect(textContent).toBeDefined();
+    expect(textContent!.text.length).toBeGreaterThan(0);
+    expect(textContent!.text).toContain('Acme Corp');
+
+    // structuredContent
+    expect(result.structuredContent).toBeDefined();
+  });
+
+  it('structuredContent validates against MetadataSchema', async () => {
+    const result = await client.callTool({ name: 'get_metadata', arguments: {} });
+    const parsed = MetadataSchema.parse(result.structuredContent);
+    expect(parsed.teams).toHaveLength(5);
+    expect(parsed.models).toHaveLength(5);
+    expect(parsed.providers).toHaveLength(3);
+    expect(parsed.taskTypes).toHaveLength(6);
+    expect(parsed.autonomyLevels).toHaveLength(3);
+  });
 });
 
 describe('MCP App Resources — Registration', () => {
