@@ -423,6 +423,49 @@ The milestones are ordered by dependency and value. If time is tight, use these 
 
 ---
 
+## M16: MCP Server — Metadata Tool (Discovery)
+
+**Objective:** Let MCP clients discover valid filter values (teams, models, providers, task types) and org context so they don't have to guess.
+
+**Motivation:** The 5 existing MCP tools accept filter parameters like `teamIds`, `models`, and `providers`, but there is no way for a client to discover what values are valid. An LLM connecting to this server must guess or hallucinate filter values. A `get_metadata` tool solves this by returning all reference data in one call.
+
+**Tasks:**
+
+1. Create `packages/shared/src/types/metadata.ts` — `MetadataSchema` Zod schema:
+   - `organization`: name, plan, totalSeats
+   - `teams`: array of { id, name, memberCount }
+   - `models`: array of { id, provider, displayName }
+   - `providers`: string[] of unique provider names
+   - `taskTypes`: string[] of valid task type values
+   - `autonomyLevels`: string[] of valid autonomy level values
+   - `dateRange`: { earliest, latest } — the available data window
+2. Export from `packages/shared/src/types/index.ts`
+3. Create `packages/shared/src/services/metadata.ts` — `getMetadata(dataset)` pure function extracting reference data from the generated dataset
+4. Export from `packages/shared/src/services/index.ts`
+5. Create `packages/mcp-server/src/formatters/metadata.ts` — human-readable text summary
+6. Create `packages/mcp-server/src/tools/metadata.ts` — `get_metadata` tool (model-facing, no filters needed)
+7. Register in `packages/mcp-server/src/server.ts`
+
+**Tests (write first):**
+
+- `tests/unit/shared/services/metadata.test.ts`:
+  - Returns all 5 teams with correct IDs and names
+  - Returns all 5 models with correct provider associations
+  - Returns all 3 providers
+  - Returns all 6 task types
+  - Returns all 3 autonomy levels
+  - Returns valid date range matching the dataset window
+  - Organization info matches dataset
+  - Multi-seed invariants: always 5 teams, 5 models, 3 providers
+- `tests/integration/mcp-tools.test.ts` (extend existing):
+  - `get_metadata` tool is registered
+  - Returns text content + structuredContent
+  - structuredContent validates against MetadataSchema
+
+**Definition of done:** `get_metadata` tool returns all reference data. MCP clients can discover valid filter values. All tests pass. Gates green.
+
+---
+
 ## Stretch Milestones
 
 ### S1: E2E Tests (Playwright)

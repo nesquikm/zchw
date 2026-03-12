@@ -931,18 +931,19 @@ export function registerSpendTools(server: McpServer) {
 
 ### Tool Inventory
 
-| Tool                     | Type         | Description                            |
-| ------------------------ | ------------ | -------------------------------------- |
-| `get_impact_summary`     | model-facing | FR-1: Impact Summary KPIs              |
-| `poll_impact_data`       | app-only     | FR-1: UI refresh for Impact            |
-| `get_spend_breakdown`    | model-facing | FR-2: Spend by team/model/time         |
-| `poll_spend_data`        | app-only     | FR-2: UI refresh for Spend             |
-| `get_adoption_metrics`   | model-facing | FR-3: Funnel, DAU, capabilities        |
-| `poll_adoption_data`     | app-only     | FR-3: UI refresh for Adoption          |
-| `get_quality_metrics`    | model-facing | FR-4: Success rate, autonomy, failures |
-| `poll_quality_data`      | app-only     | FR-4: UI refresh for Quality           |
-| `get_governance_summary` | model-facing | FR-5: Policy effectiveness, events     |
-| `poll_governance_data`   | app-only     | FR-5: UI refresh for Governance        |
+| Tool                     | Type         | Description                                               |
+| ------------------------ | ------------ | --------------------------------------------------------- |
+| `get_impact_summary`     | model-facing | FR-1: Impact Summary KPIs                                 |
+| `poll_impact_data`       | app-only     | FR-1: UI refresh for Impact                               |
+| `get_spend_breakdown`    | model-facing | FR-2: Spend by team/model/time                            |
+| `poll_spend_data`        | app-only     | FR-2: UI refresh for Spend                                |
+| `get_adoption_metrics`   | model-facing | FR-3: Funnel, DAU, capabilities                           |
+| `poll_adoption_data`     | app-only     | FR-3: UI refresh for Adoption                             |
+| `get_quality_metrics`    | model-facing | FR-4: Success rate, autonomy, failures                    |
+| `poll_quality_data`      | app-only     | FR-4: UI refresh for Quality                              |
+| `get_governance_summary` | model-facing | FR-5: Policy effectiveness, events                        |
+| `poll_governance_data`   | app-only     | FR-5: UI refresh for Governance                           |
+| `get_metadata`           | model-facing | Discovery: teams, models, providers, task types, org info |
 
 ### Text Formatting
 

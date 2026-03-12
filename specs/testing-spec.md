@@ -298,7 +298,7 @@ Tests that all services work together with the same mock dataset:
 
 Tests MCP tool registration and invocation:
 
-- All 10 tools are registered (5 model-facing + 5 app-only)
+- All 11 tools are registered (6 model-facing + 5 app-only)
 - Each model-facing tool returns both `content` (text) and `structuredContent`
 - Text content is non-empty and contains key numbers
 - structuredContent matches the expected Zod schema

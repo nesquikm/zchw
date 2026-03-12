@@ -229,7 +229,7 @@ The system SHALL expose analytics via MCP tools, accessible both locally (stdio)
 **Acceptance criteria:**
 
 - **AC-8.1:** Given a running MCP server, when an LLM calls `get_spend_breakdown` with a 30-day date range, then the tool returns both a non-empty text summary and structuredContent that validates against SpendBreakdownSchema.
-- **AC-8.2:** Given a running MCP server, when I list available tools, then all 5 model-facing tools and 5 app-only tools are registered.
+- **AC-8.2:** Given a running MCP server, when I list available tools, then all 6 model-facing tools and 5 app-only tools are registered.
 - **AC-8.3:** Given an MCP App UI for Spend, when the user changes the date range in the App UI, then the App calls `poll_spend_data` (not the model-facing tool) and charts update without LLM involvement.
 - **AC-8.4:** Given a CLI-only MCP client (e.g., Claude Code), when an LLM calls `get_impact_summary`, then the text response contains formatted KPI values (dollar amounts, percentages) that are human-readable.
 - **AC-8.5:** Given invalid filter parameters (e.g., malformed date), when a tool is called, then it returns a structured Zod validation error, not a stack trace.
