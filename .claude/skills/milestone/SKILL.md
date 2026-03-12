@@ -21,12 +21,14 @@ Execute milestone `$ARGUMENTS` from the implementation plan.
      c. Implement the code
      d. Run tests — confirm GREEN (passing)
 5. **Gate check** — Run `npm run typecheck && npm run lint && npm run test`
-6. **Report** — List all files created/modified and the gate check result
+6. **Report** — List all files created/modified, any SPEC_DEVIATIONs, and the gate check result
+7. **Human review** — Ask the user to review the code before committing. Wait for explicit approval. Do NOT commit until the user confirms.
+8. **Commit** — Only after the user approves, create a git commit
 
 ## Rules
 
 - Do NOT proceed if the gate check fails — fix issues first
 - Do NOT skip tests — this project follows strict TDD
+- Do NOT commit without user approval — always wait for explicit review
 - If you need to deviate from a spec, add `SPEC_DEVIATION: [reason]` in the code
 - Spec precedence: requirements.md > testing-spec.md > technical-spec.md > plan.md
-- Create a git commit when the milestone gate passes (unless told otherwise)
