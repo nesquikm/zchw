@@ -26,7 +26,11 @@ export function formatCurrency(amount: number): string {
     return `${sign}$${(abs / 1_000_000).toFixed(2)}M`;
   }
 
-  return `${sign}$${abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Show more precision for very small values where the 3rd/4th decimal digits
+  // carry meaningful info (e.g., $0.0801 vs $0.0843 both round to $0.08 with 2 digits)
+  const fractionDigits = abs > 0 && abs < 0.1 && (abs * 10000) % 100 >= 1 ? 4 : 2;
+
+  return `${sign}$${abs.toLocaleString('en-US', { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits })}`;
 }
 
 /**
