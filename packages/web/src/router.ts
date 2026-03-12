@@ -4,6 +4,7 @@ import { RootLayout } from './routes/__root';
 import { DashboardLayout } from './routes/dashboard';
 import { DashboardIndexPage } from './routes/dashboard/index-page';
 import { SpendPage } from './routes/dashboard/spend';
+import { AdoptionPage } from './routes/dashboard/adoption';
 
 const dashboardSearchValidation = {
   validateSearch: (search: Record<string, unknown>): DashboardSearch => ({
@@ -50,7 +51,7 @@ const spendRoute = createRoute({
 const adoptionRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: '/adoption',
-  component: () => null,
+  component: AdoptionPage,
 });
 
 const qualityRoute = createRoute({

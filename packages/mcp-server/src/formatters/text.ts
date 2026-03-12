@@ -68,13 +68,14 @@ ${modelLines}`;
 
 export function formatAdoptionSummary(data: AdoptionMetrics): string {
   const f = data.funnel;
+  const pct = (n: number) => (f.invited > 0 ? `${((n / f.invited) * 100).toFixed(0)}%` : '—');
   return `📊 Adoption & Enablement (${data.periodLabel})
 
 Adoption Funnel:
   Invited:        ${f.invited}
-  Activated:      ${f.activated} (${((f.activated / f.invited) * 100).toFixed(0)}%)
-  First outcome:  ${f.firstOutcome} (${((f.firstOutcome / f.invited) * 100).toFixed(0)}%)
-  Regular users:  ${f.regular} (${((f.regular / f.invited) * 100).toFixed(0)}%)
+  Activated:      ${f.activated} (${pct(f.activated)})
+  First outcome:  ${f.firstOutcome} (${pct(f.firstOutcome)})
+  Regular users:  ${f.regular} (${pct(f.regular)})
 
 Time to value (median): ${data.timeToValueMedianDays !== null ? `${data.timeToValueMedianDays.toFixed(1)} days` : 'N/A'}
 
@@ -83,7 +84,7 @@ ${data.capabilityAdoption
   .slice(0, 5)
   .map(
     (c) =>
-      `  ${c.taskType.padEnd(20)} ${c.sessionCount.toLocaleString()} sessions (${(c.percent * 100).toFixed(0)}%)`,
+      `  ${c.taskType.padEnd(20)} ${c.sessionCount.toLocaleString()} sessions (${c.percent.toFixed(0)}%)`,
   )
   .join('\n')}`;
 }

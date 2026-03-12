@@ -41,12 +41,12 @@ export function SpendApp() {
 
   useHostStyleVariables();
 
-  // Auto-fetch data on connect if ontoolresult didn't deliver it
+  // Fetch data immediately on connect — don't wait for ontoolresult which may fire before mount
   useEffect(() => {
-    if (!app || !isConnected || fetchedRef.current) return;
-    const timer = setTimeout(async () => {
-      if (fetchedRef.current) return;
-      fetchedRef.current = true;
+    if (!app || !isConnected) return;
+    if (fetchedRef.current) return;
+    fetchedRef.current = true;
+    (async () => {
       const result = await app.callServerTool({
         name: 'poll_spend_data',
         arguments: DEFAULT_FILTERS as Record<string, unknown>,
@@ -54,8 +54,7 @@ export function SpendApp() {
       if (result.structuredContent) {
         setData(result.structuredContent as SpendBreakdown);
       }
-    }, 2000);
-    return () => clearTimeout(timer);
+    })();
   }, [app, isConnected]);
 
   const handleFilterChange = async (newFilters: Filters) => {
