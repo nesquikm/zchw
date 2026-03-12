@@ -123,6 +123,15 @@ Work follows milestones M1–M12 defined in `specs/plan.md`. Execute one milesto
 - Require a backend server for the web dashboard (client-side SPA only)
 - Add AI chat to the web dashboard (MCP server is the AI interface)
 
+## Commit Message Format
+
+Follow the pattern: `M{n}: Short description — key detail`
+
+Examples from history:
+
+- `M1: Project scaffolding — monorepo with all configs`
+- `M3: Mock data generator — seeded PRNG, 15k sessions, 64 tests`
+
 ## Coding Standards
 
 - Zod schemas are the single source of truth for types — derive TS types with `z.infer<>`
