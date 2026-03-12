@@ -30,10 +30,6 @@ Execute milestone `$ARGUMENTS` from the implementation plan.
    - This is the **deterministic kill switch** — if it fails, fix before proceeding
    - Do NOT let LLM judgment override a failing gate
 
-### Phase 2b: Visual Check (for web milestones)
-
-If this milestone creates or modifies web UI components (M6–M8, or any milestone touching `packages/web/`), run `/visual-check` to verify the UI renders correctly in Chrome. This uses a rubber duck with browser tools to visually inspect the page and test filter switching.
-
 ### Phase 3: Self-Review Loop (max 2 rounds)
 
 > Principle: "Never let an LLM be the only thing standing between you and an infinite loop."
@@ -61,6 +57,10 @@ If this milestone creates or modifies web UI components (M6–M8, or any milesto
      - If round 2 found **new/different issues** → fix, re-run gate check, then escalate to human with findings (diminishing returns — let human judge)
 
    d. **After any fix** — always re-run the full gate check before continuing
+
+### Phase 3b: Visual Check (for web milestones)
+
+If this milestone creates or modifies web UI components (M6–M8, or any milestone touching `packages/web/`), run `/visual-check` to verify the UI renders correctly in Chrome. This uses a rubber duck with browser tools to visually inspect the page and test filter switching. This runs **after** self-review so it validates the final state of the code.
 
 ### Phase 4: Report & Handoff
 
