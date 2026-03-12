@@ -1,5 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
+import {
+  registerAppTool,
+  registerAppResource,
+  RESOURCE_MIME_TYPE,
+} from '@modelcontextprotocol/ext-apps/server';
 import {
   SpendBreakdownSchema,
   McpFiltersSchema,
@@ -8,6 +12,11 @@ import {
 } from '@agentview/shared';
 import { formatSpendSummary } from '../formatters/text.js';
 import { applyDefaultFilters } from '../filters.js';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const DIST_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'dist', 'ui');
 
 export function registerSpendTools(server: McpServer) {
   const resourceUri = 'ui://agentview/spend';
@@ -60,6 +69,25 @@ export function registerSpendTools(server: McpServer) {
       return {
         content: [{ type: 'text' as const, text: JSON.stringify(data) }],
         structuredContent: data,
+      };
+    },
+  );
+
+  registerAppResource(
+    server,
+    'Spend Analytics',
+    resourceUri,
+    { description: 'Interactive Spend Analytics Dashboard' },
+    () => {
+      const html = readFileSync(join(DIST_DIR, 'spend/mcp-app.html'), 'utf-8');
+      return {
+        contents: [
+          {
+            uri: resourceUri,
+            mimeType: RESOURCE_MIME_TYPE,
+            text: html,
+          },
+        ],
       };
     },
   );

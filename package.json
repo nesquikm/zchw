@@ -13,13 +13,15 @@
     "stop:web": "lsof -ti:5173 | xargs kill 2>/dev/null || true",
     "stop:mcp": "lsof -ti:3001 | xargs kill 2>/dev/null || true",
     "build": "npm run build -w packages/shared && npm run build -w packages/web && npm run build -w packages/mcp-server",
+    "build:mcp": "npm run build -w packages/shared && npm run build -w packages/mcp-server",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc -b",
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint --fix . && prettier --write .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

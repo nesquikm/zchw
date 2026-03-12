@@ -5,17 +5,25 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts -- --http",
-    "build": "tsc -b tsconfig.server.json",
+    "build": "tsc -b tsconfig.server.json && tsx build-apps.ts",
+    "build:apps": "tsx build-apps.ts",
     "start": "node dist/main.js",
     "test": "vitest run"
   },
   "dependencies": {
     "@agentview/shared": "*",
-    "@modelcontextprotocol/sdk": "^1.27.1",
-    "@modelcontextprotocol/ext-apps": "^1.2.2"
+    "@modelcontextprotocol/ext-apps": "^1.2.2",
+    "@modelcontextprotocol/sdk": "^1.27.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "tsx": "^4.0.0"
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "recharts": "^3.8.0",
+    "tsx": "^4.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
   }
 }

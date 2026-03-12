@@ -77,7 +77,7 @@ describe('getImpactSummary', () => {
       if (expectedVerified > 0) {
         expect(result.costPerVerifiedOutcome).toBeCloseTo(expectedSpend / expectedVerified, 2);
       } else {
-        expect(result.costPerVerifiedOutcome).toBe(Infinity);
+        expect(result.costPerVerifiedOutcome).toBe(0);
       }
     });
 
@@ -88,7 +88,7 @@ describe('getImpactSummary', () => {
         teamIds: ['team-nonexistent'],
       };
       const result = getImpactSummary(filters, NOW, dataset);
-      expect(result.costPerVerifiedOutcome).toBe(Infinity);
+      expect(result.costPerVerifiedOutcome).toBe(0);
     });
 
     it('uses ALL session costs (fully-loaded), not just completed', () => {
@@ -415,7 +415,7 @@ describe('getImpactSummary', () => {
       expect(result.totalSpend).toBe(0);
       expect(result.activeUsers).toBe(0);
       expect(result.verifiedOutcomes).toBe(0);
-      expect(result.costPerVerifiedOutcome).toBe(Infinity);
+      expect(result.costPerVerifiedOutcome).toBe(0);
       expect(result.agentContributionPercent).toBe(0);
     });
 

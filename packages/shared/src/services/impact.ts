@@ -40,7 +40,7 @@ export function getImpactSummary(
   const verifiedOutcomes = sessions.filter((s) => isVerifiedOutcome(s, currentNow)).length;
 
   // Cost per verified outcome (fully-loaded)
-  const costPerVerifiedOutcome = verifiedOutcomes > 0 ? totalSpend / verifiedOutcomes : Infinity;
+  const costPerVerifiedOutcome = verifiedOutcomes > 0 ? totalSpend / verifiedOutcomes : 0;
 
   // Value-to-cost ratio
   const estimatedHoursSaved = sessions.reduce(
@@ -79,7 +79,7 @@ export function getImpactSummary(
     const prevSessions = filterSessions(ds.sessions, f);
     const prevSpend = prevSessions.reduce((sum, s) => sum + s.estimatedCostUSD, 0);
     const prevVerified = prevSessions.filter((s) => isVerifiedOutcome(s, currentNow)).length;
-    return prevVerified > 0 ? prevSpend / prevVerified : Infinity;
+    return prevVerified > 0 ? prevSpend / prevVerified : 0;
   });
 
   const valueToCostRatioTrend = computeTrend(valueToCostRatio, filters, (f) => {

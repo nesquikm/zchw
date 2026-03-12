@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createServer } from '../../packages/mcp-server/src/server.js';
@@ -254,4 +256,61 @@ describe('MCP Tools — App-only (poll) tools', () => {
       expect(parsed).toBeDefined();
     });
   }
+});
+
+describe('MCP App Resources — Registration', () => {
+  it('registers app resources for impact and spend', async () => {
+    const result = await client.listResources();
+    const uris = result.resources.map((r) => r.uri);
+
+    expect(uris).toContain('ui://agentview/impact');
+    expect(uris).toContain('ui://agentview/spend');
+  });
+
+  it('impact resource has correct name and description', async () => {
+    const result = await client.listResources();
+    const impact = result.resources.find((r) => r.uri === 'ui://agentview/impact');
+    expect(impact).toBeDefined();
+    expect(impact!.name).toBe('Impact Summary');
+  });
+
+  it('spend resource has correct name and description', async () => {
+    const result = await client.listResources();
+    const spend = result.resources.find((r) => r.uri === 'ui://agentview/spend');
+    expect(spend).toBeDefined();
+    expect(spend!.name).toBe('Spend Analytics');
+  });
+});
+
+describe('MCP App UIs — Build Output', () => {
+  const distDir = join(__dirname, '../../packages/mcp-server/dist/ui');
+
+  it('impact app HTML exists as single file', () => {
+    const htmlPath = join(distDir, 'impact/mcp-app.html');
+    expect(existsSync(htmlPath)).toBe(true);
+    const html = readFileSync(htmlPath, 'utf-8');
+    expect(html).toContain('<!DOCTYPE html>');
+    expect(html).toContain('<script');
+    // Single-file: JS should be inlined (no external script src)
+    expect(html).not.toMatch(/<script[^>]+src=/);
+  });
+
+  it('spend app HTML exists as single file', () => {
+    const htmlPath = join(distDir, 'spend/mcp-app.html');
+    expect(existsSync(htmlPath)).toBe(true);
+    const html = readFileSync(htmlPath, 'utf-8');
+    expect(html).toContain('<!DOCTYPE html>');
+    expect(html).toContain('<script');
+    expect(html).not.toMatch(/<script[^>]+src=/);
+  });
+
+  it('impact app HTML contains React app code', () => {
+    const html = readFileSync(join(distDir, 'impact/mcp-app.html'), 'utf-8');
+    expect(html).toContain('Impact Summary');
+  });
+
+  it('spend app HTML contains React app code', () => {
+    const html = readFileSync(join(distDir, 'spend/mcp-app.html'), 'utf-8');
+    expect(html).toContain('Spend Analytics');
+  });
 });
