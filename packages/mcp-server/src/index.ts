@@ -1,2 +1,1 @@
-// @agentview/mcp-server — entry point placeholder
-export {};
+export { createServer } from './server.js';
