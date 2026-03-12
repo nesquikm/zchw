@@ -1,4 +1,4 @@
-import { useSearch, useNavigate } from '@tanstack/react-router';
+import { useSearch, useNavigate, useLocation } from '@tanstack/react-router';
 import type { Filters } from '@agentview/shared';
 import { computeDateRange, MOCK_NOW, type DateRangePreset } from '../lib/constants';
 
@@ -29,7 +29,8 @@ export function searchToFilters(params: DashboardSearch, now: Date = MOCK_NOW): 
 /** Hook providing current filters from URL and update functions */
 export function useFilters() {
   const search = useSearch({ from: '/dashboard' }) as DashboardSearch;
-  const navigate = useNavigate({ from: '/dashboard' });
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const filters = searchToFilters(search);
   const range = (search.range ?? '30d') as DateRangePreset;
@@ -38,6 +39,7 @@ export function useFilters() {
 
   const setRange = (preset: DateRangePreset, custom?: { from: string; to: string }) => {
     void navigate({
+      to: location.pathname,
       search: {
         ...search,
         range: preset,
@@ -49,6 +51,7 @@ export function useFilters() {
 
   const setTeams = (teamIds: string[]) => {
     void navigate({
+      to: location.pathname,
       search: {
         ...search,
         teams: teamIds.length > 0 ? teamIds.join(',') : undefined,
@@ -58,6 +61,7 @@ export function useFilters() {
 
   const setModels = (models: string[]) => {
     void navigate({
+      to: location.pathname,
       search: {
         ...search,
         models: models.length > 0 ? models.join(',') : undefined,
