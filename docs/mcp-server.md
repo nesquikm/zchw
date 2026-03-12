@@ -66,11 +66,20 @@ Start the server with `npm run dev:mcp`, then run `/mcp` in Claude Code to conne
 | `get_adoption_metrics`   | model-facing | Activation funnel, DAU/WAU, capability adoption                    |
 | `get_quality_metrics`    | model-facing | Success rate, autonomy distribution, failure modes                 |
 | `get_governance_summary` | model-facing | Policy blocks, security events, compliance stats                   |
+| `get_metadata`           | model-facing | Org info, teams, models, providers, task types, autonomy levels    |
 | `poll_*_data` (5 tools)  | app-only     | Same data for MCP App UI refresh with changed filters              |
 
-All tools accept optional filters: `dateRange`, `teamIds`, `models`, `providers`.
+All tools except `get_metadata` accept optional filters: `dateRange`, `teamIds`, `models`, `providers`. Use `get_metadata` to discover valid filter values.
 
 ## Example prompts
+
+### Discovery
+
+```
+What teams and models are available?
+What filters can I use?
+What's the data date range?
+```
 
 ### Impact
 
