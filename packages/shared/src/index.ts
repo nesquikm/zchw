@@ -1,3 +1,1 @@
-// @agentview/shared — public API
-// Schemas, services, utils, and mock data will be exported here.
-export {};
+export * from './types/index.js';
