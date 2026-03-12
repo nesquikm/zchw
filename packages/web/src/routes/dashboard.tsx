@@ -1,5 +1,6 @@
 import { Outlet } from '@tanstack/react-router';
 import { Header } from '../components/layout/header';
+import { AiCallout } from '../components/layout/ai-callout';
 import { DateRangePicker } from '../components/filters/date-range-picker';
 import { TeamFilter } from '../components/filters/team-filter';
 import { ModelFilter } from '../components/filters/model-filter';
@@ -24,6 +25,7 @@ export function DashboardLayout() {
   return (
     <>
       <Header />
+      <AiCallout />
       <div className="border-b border-zinc-200 bg-zinc-50 px-6 py-3">
         <div className="flex flex-wrap items-center gap-4">
           <DateRangePicker
