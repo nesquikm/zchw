@@ -1,5 +1,12 @@
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
+import {
+  registerAppTool,
+  registerAppResource,
+  RESOURCE_MIME_TYPE,
+} from '@modelcontextprotocol/ext-apps/server';
 import {
   QualityMetricsSchema,
   McpFiltersSchema,
@@ -8,6 +15,9 @@ import {
 } from '@agentview/shared';
 import { formatQualitySummary } from '../formatters/text.js';
 import { applyDefaultFilters } from '../filters.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const DIST_DIR = join(__dirname, '..', '..', 'dist', 'ui');
 
 export function registerQualityTools(server: McpServer) {
   const resourceUri = 'ui://agentview/quality';
@@ -60,6 +70,25 @@ export function registerQualityTools(server: McpServer) {
       return {
         content: [{ type: 'text' as const, text: JSON.stringify(data) }],
         structuredContent: data,
+      };
+    },
+  );
+
+  registerAppResource(
+    server,
+    'Quality & Autonomy',
+    resourceUri,
+    { description: 'Interactive Quality & Autonomy Dashboard' },
+    () => {
+      const html = readFileSync(join(DIST_DIR, 'quality/mcp-app.html'), 'utf-8');
+      return {
+        contents: [
+          {
+            uri: resourceUri,
+            mimeType: RESOURCE_MIME_TYPE,
+            text: html,
+          },
+        ],
       };
     },
   );
