@@ -181,7 +181,13 @@ function fmtCurrency(n: number): string {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: { fontFamily: 'system-ui, sans-serif', padding: 16, maxWidth: 800 },
+  main: {
+    fontFamily: 'system-ui, sans-serif',
+    padding: 16,
+    maxWidth: 800,
+    background: '#f9fafb',
+    borderRadius: 12,
+  },
   period: { color: '#666', fontSize: 13, margin: '4px 0 12px' },
   summaryRow: { display: 'flex', gap: 12, marginBottom: 20 },
   summaryCard: {
