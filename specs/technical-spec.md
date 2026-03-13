@@ -5,23 +5,23 @@
 AgentView is a monorepo with two interfaces sharing a common data layer:
 
 ```
-┌─────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────┐
 │              Shared Data Layer                   │
-│   types/   — Zod schemas + derived TS types     │
+│   types/   — Zod schemas + derived TS types      │
 │   mock/    — seeded deterministic data generator │
 │   services/— query/aggregation functions         │
 │   utils/   — formatters, calculations            │
 └────────────┬──────────────────┬──────────────────┘
              │                  │
-    ┌────────▼────────┐  ┌─────▼───────────────┐
-    │  Web Dashboard  │  │    MCP Server        │
-    │  Vite + React   │  │  @mcp/sdk + tools    │
-    │  TanStack Router│  │  MCP App UIs (React) │
+    ┌────────▼────────┐  ┌─────▼──────────────────┐
+    │  Web Dashboard  │  │    MCP Server          │
+    │  Vite + React   │  │  @mcp/sdk + tools      │
+    │  TanStack Router│  │  MCP App UIs (React).  │
     │  TanStack Query │  │  vite-plugin-singlefile│
-    │  shadcn/ui      │  │  stdio / HTTP        │
-    │  Recharts       │  │  Recharts            │
-    │  localhost:5173  │  │                      │
-    └─────────────────┘  └──────────────────────┘
+    │  shadcn/ui      │  │  stdio / HTTP          │
+    │  Recharts       │  │  Recharts              │
+    │  localhost:5173 │  │                        │
+    └─────────────────┘  └────────────────────────┘
 ```
 
 Both interfaces call the same service functions. The web dashboard calls them directly (in-browser, wrapped in TanStack Query for loading states). The MCP server calls them from tool handlers and returns text + structuredContent.

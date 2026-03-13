@@ -45,7 +45,7 @@ packages/
 
 - **Language:** TypeScript 5 (strict mode)
 - **Build:** Vite 7, npm workspaces
-- **Web:** React 19, TanStack Router, TanStack Query, shadcn/ui, Tailwind CSS 4, Recharts 3
+- **Web:** React 19, TanStack Router, TanStack Query, Tailwind CSS 4, Recharts 3
 - **MCP:** @modelcontextprotocol/sdk, stdio + StreamableHTTPServerTransport
 - **Testing:** Vitest 4 (workspace mode), React Testing Library, @testing-library/user-event
 - **Validation:** Zod 4 (schemas are the contract between all layers)
@@ -141,4 +141,3 @@ Examples from history:
 - No `any` types — use Zod inference
 - Components receive data via props, wrapped in TanStack Query hooks
 - URL search params are the source of truth for filter state (TanStack Router)
-- Use shadcn/ui components — don't reinvent UI primitives
