@@ -17,7 +17,7 @@ Three interfaces to the same data — all powered by one shared service layer:
                              │
               ┌──────────────┼──────────────┐
               │              │              │
-     ┌────────▼───────┐ ┌───▼──────────┐ ┌─▼────────────┐
+     ┌────────▼───────┐ ┌────▼─────────┐ ┌──▼───────────┐
      │  Web Dashboard │ │  MCP Server  │ │ A2A Protocol │
      │ React SPA      │ │ 6 tools      │ │ (future)     │
      │ 5 pages        │ │ 5 MCP Apps   │ │              │
